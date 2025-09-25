@@ -1610,33 +1610,33 @@ class _Add_eventState extends State<Add_event> {
                                     ),
                                     SizedBox(width: 10),
                                     // Other
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          is_match = false;
-                                          is_other = true;
-                                        });
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: is_other ? Color(0xffF0F6F4) : Colors.white,
-                                          borderRadius: BorderRadius.circular(16),
-                                          border: Border.all(
-                                            color: is_other ? Color(0xff488B71) : Colors.grey.withOpacity(.1),
-                                            width: 2,
-                                          ),
-                                        ),
-                                        padding: EdgeInsets.all(10),
-                                        height: 82,
-                                        width: 75,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text("other".tr(), style: TextStyle(fontSize: 16)),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     setState(() {
+                                    //       is_match = false;
+                                    //       is_other = true;
+                                    //     });
+                                    //   },
+                                    //   child: Container(
+                                    //     decoration: BoxDecoration(
+                                    //       color: is_other ? Color(0xffF0F6F4) : Colors.white,
+                                    //       borderRadius: BorderRadius.circular(16),
+                                    //       border: Border.all(
+                                    //         color: is_other ? Color(0xff488B71) : Colors.grey.withOpacity(.1),
+                                    //         width: 2,
+                                    //       ),
+                                    //     ),
+                                    //     padding: EdgeInsets.all(10),
+                                    //     height: 82,
+                                    //     width: 75,
+                                    //     child: Column(
+                                    //       mainAxisAlignment: MainAxisAlignment.center,
+                                    //       children: [
+                                    //         Text("other".tr(), style: TextStyle(fontSize: 16)),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
 

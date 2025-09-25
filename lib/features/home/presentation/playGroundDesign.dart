@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lacrosse/data/Local/sharedPref/sharedPref.dart';
 import 'package:lacrosse/features/home/data/manager/cubit/home_cubit.dart';
 import 'package:lacrosse/features/home/data/models/PlayGroundModel.dart';
 import 'package:lacrosse/features/home/presentation/Map.dart';
@@ -40,7 +41,7 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
+          CacheHelper.getData(key: "roles")  == "Admin"  ?     IconButton(
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
               TextEditingController nameController = TextEditingController();
@@ -190,9 +191,9 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
                     ),
                   );
                 },
-              );
+              ) ;
             },
-          )
+          ) :SizedBox(),
         ],
       ),
       body: Column(
@@ -294,14 +295,14 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
                                 },
                               ),
                               SizedBox(width: 10),
-                              IconButton(
+                              CacheHelper.getData(key: "roles")  == "Admin" ?               IconButton(
                                 icon: Icon(Icons.edit,
                                     color: Colors.blue, size: 22),
                                 onPressed: () {
                                   // هنا تضيف كود تعديل الملعب
                                      showEditPlaygroundSheet(context, pg); // مثال على Bottom Sheet للتعديل
                                 },
-                              ),
+                              ) :SizedBox(),
                             ],
                           ),
                         ),

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lacrosse/data/Local/sharedPref/sharedPref.dart';
 import 'package:lacrosse/features/home/data/models/PlayerModel.dart';
 import 'package:lacrosse/features/home/presentation/EditPlayerScreen.dart';
 
@@ -25,11 +26,11 @@ class _CustomplayerWidgetState extends State<Customplayerwidget> {
         padding: EdgeInsets.symmetric(vertical: 10),
         child: GestureDetector(
           onTap: () {
-            navigateTo(
+            CacheHelper.getData(key: "roles")  == "Admin" ?          navigateTo(
                 context,
                 EditPlayerScreen(
                   playerId: widget.userModel.id,
-                ));
+                )): print("object");
           },
           child: Container(
             width: double.infinity,

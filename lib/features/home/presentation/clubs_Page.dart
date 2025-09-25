@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lacrosse/data/Local/sharedPref/sharedPref.dart';
 import 'package:lacrosse/features/eventsPage/data/manager/cubit/manager_cubit.dart';
 import 'package:lacrosse/features/eventsPage/data/manager/cubit/manager_states.dart';
 import 'package:lacrosse/features/home/data/manager/cubit/home_cubit.dart';
@@ -161,7 +162,7 @@ class _ClubScreenState extends State<ClubScreen> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: (){
-                                  showEditClubSheet(context, allClub[index]);
+                                  CacheHelper.getData(key: "roles")  == "Admin" ?              showEditClubSheet(context, allClub[index]) :print("Not Admin");
                                 },
                                 child: ClubItem(
                                   name: allClub[index].name!,

@@ -60,7 +60,7 @@ class _activityDeatlScreenState extends State<activityDeatlScreen> {
           if (state is AddInternalEventReservationFailure) {
             _showAwesomeErrorDialog(context, state.errorMessage);
           }
-          if( state is DeleteInternalEventSuccess){
+          if (state is DeleteInternalEventSuccess) {
             Navigator.pop(context);
           }
         },
@@ -121,7 +121,6 @@ class _activityDeatlScreenState extends State<activityDeatlScreen> {
                           SizedBox(width: 10),
                           // أيقونة الحذف
 
-
                           // عنوان الصفحة
                           Text(
                             "activitiesDetail".tr(),
@@ -131,54 +130,57 @@ class _activityDeatlScreenState extends State<activityDeatlScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text("تأكيد الحذف"),
-                                  content:
-                                  Text("هل أنت متأكد من رغبتك في الحذف؟"),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(
-                                            context); // إغلاق الديالوج
-                                      },
-                                      child: Text("رجوع"),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        Navigator.pop(
-                                            context); // إغلاق الديالوج أولاً
-                                        await context
-                                            .read<ActivitiesCubit>()
-                                            .deleteInternalEvent(
-                                            widget.eventID);
+                          CacheHelper.getData(key: "roles") == "Admin"
+                              ? GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text("تأكيد الحذف"),
+                                        content: Text(
+                                            "هل أنت متأكد من رغبتك في الحذف؟"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(
+                                                  context); // إغلاق الديالوج
+                                            },
+                                            child: Text("رجوع"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              Navigator.pop(
+                                                  context); // إغلاق الديالوج أولاً
+                                              await context
+                                                  .read<ActivitiesCubit>()
+                                                  .deleteInternalEvent(
+                                                      widget.eventID);
 
-
-                                        // هنا نادي الـ API الخاص بالحذف
-                                      },
-                                      child: Text("تأكيد"),
+                                              // هنا نادي الـ API الخاص بالحذف
+                                            },
+                                            child: Text("تأكيد"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.withOpacity(0.6),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                  ],
-                                ),
-                              );
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.red.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                Icons.delete_outline,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ),
-                          ),
+                                    child: Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(
+                                  width: 40,
+                                )
                         ],
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lacrosse/data/Local/sharedPref/sharedPref.dart';
 import 'package:lacrosse/features/home/data/manager/cubit/home_cubit.dart';
 
 import 'package:lacrosse/features/home/data/models/matchModel.dart';
@@ -125,8 +126,8 @@ class _MatchesScreenState extends State<MatchesScreen> {
                                   final MatchModel model = allMatches[index];
                                   return GestureDetector(
                                       onTap: () {
-                                        showScoreInputSheet(context, model,
-                                            context.read<HomeCubit>());
+                                        CacheHelper.getData(key: "roles")  == "Admin" ?           showScoreInputSheet(context, model,
+                                            context.read<HomeCubit>()) :print("not admin");
                                       },
                                       child: buildMatch(model));
                                 }))
