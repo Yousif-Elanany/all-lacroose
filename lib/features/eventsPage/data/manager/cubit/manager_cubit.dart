@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:lacrosse/data/Local/sharedPref/sharedPref.dart';
 import 'package:lacrosse/features/auth/data/manager/cubit/auth_states.dart';
 import 'package:lacrosse/features/auth/data/model/Login_model.dart';
@@ -372,25 +373,31 @@ class managerCubit extends Cubit<ManagerStates> {
     required String Location,
     required String FromDay,
     required String ToDay,
-    required int FromTime,
-    required int ToTime,
+    required String FromTime,
+    required String ToTime,
     File? file,
   }) async {
     emit(AddEventLoading());
     try {
+      final formData = FormData.fromMap({
+        "LangId": CacheHelper.getData(key: "lang") ?? 1,
+        "Name": Name,
+        "MapLink": "Try to add map link",
+        "Notes" : "Try to add notes",
+        "FromDay": FromDay,       // ex: "2025-01-04"
+        "ToDay": ToDay,           // ex: "2025-01-05"
+        "FromTime": FromTime,     // ex: "14:30"
+        "ToTime": ToTime,         // ex: "18:00"
+        "Description": Description,
+        "Location": Location,
+        "file": (file!=null)?await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split('/').last,
+        ):"",
+      });
       final response = await dioService.postWithToken(
         "api/Event/Create",
-        data: {
-          "LangId": 1,
-          "Name": Name,
-          "MapLink": "",
-          "FromDay ": FromDay, // "2025-01-04T21:02:17.427Z",
-          "ToDay ": ToDay, //"2025-01-04T21:02:17.427Z",
-          "FromTime ": FromTime,
-          "ToTime ": ToTime,
-          "Location": Location,
-          "file": file,
-        },
+        data: formData,
       );
       if (response.statusCode == 200) {
         print(response.data);

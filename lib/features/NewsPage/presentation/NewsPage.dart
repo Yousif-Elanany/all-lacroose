@@ -133,11 +133,22 @@ class _HomeScreenState extends State<NewsPage> {
                   padding: EdgeInsets.only(top: 8),
                   itemBuilder: (context,index){
                     return  GestureDetector(
-                      onTap: (){
+                      onTap: ()async{
 
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => NewsDetailPage(newsList[index].id !)));/////////
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewsDetailPage(newsList[index].id!),
+                          ),
+                        );
+
+// لو رجع من الصفحة بعد الحذف
+                        if (result == true) {
+                          context.read<NewsCubit>().fetchAllNewsData();
+                        }
+
+
+
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),

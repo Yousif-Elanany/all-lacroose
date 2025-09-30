@@ -55,9 +55,16 @@
   "create_new_account": "انشاء حساب جديد",
   "step": "خطوه ",
   "from": " من",
+  "delete_title": "تأكيد الحذف",
+  "delete_message": "هل أنت متأكد أنك تريد حذف هذا العنصر؟",
+  "edit_success": "تم التعديل بنجاح",
+  "edit_failure": "حدث خطأ أثناء التعديل",
+
   "start_time": "يبدأ",
   "end_time": "ينتهي",
   "please_select_image": "من فضلك اختر صورة",
+  "event_added_success": "تم إضافة الحدث بنجاح",
+  "edit_news": "تعديل الخبر",
 
   "confirm_pass": "قم بتآكيد كلمه المرور",
   "next": "التالي",

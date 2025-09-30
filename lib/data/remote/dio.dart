@@ -340,7 +340,7 @@ class DioService {
 
   Future<Response> postWithToken(
       String endpoint, {
-        Map<String, dynamic>? data,
+        dynamic? data,
         Map<String, dynamic>? queryParameters,
       }) async {
     try {

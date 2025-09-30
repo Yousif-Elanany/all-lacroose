@@ -37,3 +37,41 @@ class NewsByIdFailure extends NewsState {
 
   NewsByIdFailure(this.errorMessage);
 }
+
+class UploadImageLoading extends NewsState {}
+
+class UploadImageSuccess extends NewsState {
+  final String Image_videoLink;
+
+  UploadImageSuccess(this.Image_videoLink );
+}
+
+class UploadImageFailure extends NewsState {
+  final String errorMessage;
+
+  UploadImageFailure(this.errorMessage);
+}
+class NewDeletedLoading extends NewsState {}
+
+class NewDeletedSuccess extends NewsState {
+
+  NewDeletedSuccess();
+}
+
+class NewDeletedFailure extends NewsState {
+
+
+  NewDeletedFailure();
+}
+
+class EditNewsLoading extends NewsState {}
+
+class EditNewsSuccess extends NewsState {
+
+  EditNewsSuccess();
+}
+
+class EditNewsFailure extends NewsState {
+  final String message;
+  EditNewsFailure(this.message);
+}

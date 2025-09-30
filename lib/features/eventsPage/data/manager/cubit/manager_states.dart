@@ -199,3 +199,4 @@ class AddEventFailure extends ManagerStates {
 
   AddEventFailure(this.errorMessage);
 }
+

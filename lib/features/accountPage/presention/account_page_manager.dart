@@ -26,7 +26,12 @@ class _Accountpage_managerState extends State<Accountpage_manager> {
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
   String language = "en";
   String roles = CacheHelper.getData(key: "roles") ?? "";
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(CacheHelper.getData(key: "UserPhoto"));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,20 +187,19 @@ class _Accountpage_managerState extends State<Accountpage_manager> {
                             padding: const EdgeInsets.all(12.0),
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 15),
-                                  child: CircleAvatar(
-                                    radius: 40,
-
-                                    backgroundImage: NetworkImage(
-                                 // "http://app774.uat.toq.sa/LacrosseApi/Images/InternalEventImage/dabffcee-cd4c-4d94-865a-083e966592cc.jpg"  // state.userPhoto,
-                                  state.userPhoto,
-                                    ),
-                                    // child: Image(
-                                    //   image: AssetImage("assets/images/photo.png"),
-                                    //  fit: BoxFit.cover,
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.symmetric(vertical: 15),
+                                //   child: CircleAvatar(
+                                //     radius: 40,
+                                //
+                                //     backgroundImage: CacheHelper.getData(key: "UserPhoto") != null
+                                //         ? NetworkImage(CacheHelper.getData(key: "UserPhoto")!)
+                                //         : AssetImage("assets/images/reg.png") as ImageProvider, // ✅ الصورة الافتراضية
+                                //     // child: Image(
+                                //     //   image: AssetImage("assets/images/photo.png"),
+                                //     //  fit: BoxFit.cover,
+                                //   ),
+                                // ),
 
 
                                 Padding(
@@ -256,9 +260,9 @@ class _Accountpage_managerState extends State<Accountpage_manager> {
                                 child: CircleAvatar(
                                   radius: 40,
 
-                                  backgroundImage: NetworkImage(
-                                    CacheHelper.getData(key: "UserPhoto")??"",
-                                  ),
+                                  backgroundImage: CacheHelper.getData(key: "UserPhoto") != null
+                                      ? NetworkImage(CacheHelper.getData(key: "UserPhoto")!)
+                                      : AssetImage("assets/images/reg.png") as ImageProvider, // ✅ الصورة الافتراضية
                                   // child: Image(
                                   //   image: AssetImage("assets/images/photo.png"),
                                   //  fit: BoxFit.cover,
