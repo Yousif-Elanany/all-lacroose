@@ -29,26 +29,31 @@ class _AudienceExperienceScheduleState extends State<AudienceExperienceSchedule>
   //int selectedDay2 = DateTime.now().month; // اليوم الحالي
   List<int> daysInMonth = []; // قائمة الأيام في الشهر الحالي
   List<ExperiencesModel> ExprienceList = [];
-  final ScrollController _scrollController = ScrollController();
-  @override
+  final ScrollController _scrollController = ScrollController();@override
   void initState() {
     super.initState();
 
-
-
+    // ✅ أول حاجة نولّد أيام الشهر الحالي
     _generateDaysInMonth(selectedDate);
-    context
-        .read<managerCubit>()
-        .getExperiences(date: selectedDate);
+
+    // ✅ بعدين نجيب التجارب
+    String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+    context.read<managerCubit>().getExperiences(date: formattedDate);
   }
 
   // دالة لحساب عدد الأيام في الشهر
   void _generateDaysInMonth(DateTime date) {
-    int totalDays =
-        DateTime(date.year, date.month + 1, 0).day; // حساب عدد أيام الشهر
+    int totalDays = DateTime(date.year, date.month + 1, 0).day; // عدد أيام الشهر
     setState(() {
       daysInMonth = List.generate(totalDays, (index) => index + 1);
-      selectedDay = date.day; // تعيين اليوم الحالي
+      selectedDay = date.day; // اليوم الحالي
+
+      // تحديث selectedDate
+      selectedDate = DateTime(date.year, date.month, selectedDay);
+
+      // صيغة التاريخ المطلوبة
+      String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+      print("Selected Date: $formattedDate");
     });
   }
 
@@ -69,10 +74,10 @@ class _AudienceExperienceScheduleState extends State<AudienceExperienceSchedule>
         print(ExprienceList);
       }
       if (state is DeleteExperienceSuccess) {
-
-        context
-            .read<managerCubit>()
-            .getExperiences(date: selectedDate);
+        //
+        // context
+        //     .read<managerCubit>()
+        //     .getExperiences(date: selectedDate);
       }
 
         },
@@ -211,31 +216,25 @@ class _AudienceExperienceScheduleState extends State<AudienceExperienceSchedule>
 
                                     return GestureDetector(
                                       onTap: () async{
+                                        selectedDay = dayNumber;
+                                        selectedDate = DateTime(
+                                          selectedDate.year,
+                                          selectedDate.month,
+                                          dayNumber,
+                                        );
 
+                                        setState(() {});
 
-                                            selectedDay = dayNumber;
-                                            selectedDate = DateTime(
-                                                selectedDate.year,
-                                                selectedDate.month,
-                                                dayNumber);
-setState(() {
+// ✅ اطبع التاريخ بصيغة مفهومة
+                                        String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
 
-});
+                                        print("selectedDate //////////////////////////////");
+                                        print(formattedDate);
 
-                                          print(
-                                              "selectedDate//////////////////////////////");
-                                          // print(isSelected);
-                                          // print(dayNumber);
-                                          // print(selectedDay);
-                                          print(selectedDate);
-                                          // String formattedDate =
-                                          //     DateFormat('yyyy-MM-dd HH:mm:ss')
-                                          //         .format(selectedDate);
-
-                                       await context
-                                        .read<managerCubit>()
-                                        .getExperiences(date: selectedDate);
-
+// ✅ ابعته بصيغة String مش DateTime
+                                        await context
+                                            .read<managerCubit>()
+                                            .getExperiences(date: formattedDate);
 
 
                                       },

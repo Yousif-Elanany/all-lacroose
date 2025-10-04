@@ -146,6 +146,9 @@
   "edit_news": "Edit News",
   "edit_success": "Edited successfully",
   "edit_failure": "An error occurred while editing",
+  "delete_player_title": "Delete Player",
+  "delete_player_message": "Are you sure you want to delete this player?",
+  "delete": "Delete",
   "current_password": "current password",
   "new_pass": "new password",
   "Sunday":  "Sunday",
@@ -216,6 +219,9 @@
   "reg_player": "Add Player",
   "reg_trainer": "Add Trainer",
 
+  "delete_player": "Are you sure you want to delete this player?",
+  "edit_experiment": "Edit Experiment",
+  "changes_saved_successfully": "Changes saved successfully",
 
   "other": "other",
   "no_teamMatches": "No teamMatches",

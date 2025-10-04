@@ -6,6 +6,10 @@
   "activities": "الفعاليات",
   "account": "الحساب",
   "Mor about us": "المزيد عن الاتحاد",
+  "delete_player": "هل أنت متأكد أنك تريد حذف هذا اللاعب؟",
+  "edit_experiment": "تعديل التجربة",
+  "changes_saved_successfully": "تم حفظ التغييرات بنجاح",
+
   "Rules of the game": "قوانين اللعبة",
   "Nearby stadium": "اقرب ملعب",
   "Saudi lacrosse Federation": "الاتحاد السعودي للاكروس",
@@ -59,7 +63,9 @@
   "delete_message": "هل أنت متأكد أنك تريد حذف هذا العنصر؟",
   "edit_success": "تم التعديل بنجاح",
   "edit_failure": "حدث خطأ أثناء التعديل",
-
+  "delete_player_title": "حذف اللاعب",
+  "delete_player_message": "هل أنت متأكد أنك تريد حذف هذا اللاعب؟",
+  "delete": "حذف",
   "start_time": "يبدأ",
   "end_time": "ينتهي",
   "please_select_image": "من فضلك اختر صورة",

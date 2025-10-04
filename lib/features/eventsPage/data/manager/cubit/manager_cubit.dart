@@ -383,17 +383,19 @@ class managerCubit extends Cubit<ManagerStates> {
         "LangId": CacheHelper.getData(key: "lang") ?? 1,
         "Name": Name,
         "MapLink": "Try to add map link",
-        "Notes" : "Try to add notes",
-        "FromDay": FromDay,       // ex: "2025-01-04"
-        "ToDay": ToDay,           // ex: "2025-01-05"
-        "FromTime": FromTime,     // ex: "14:30"
-        "ToTime": ToTime,         // ex: "18:00"
+        "Notes": "Try to add notes",
+        "FromDay": FromDay, // ex: "2025-01-04"
+        "ToDay": ToDay, // ex: "2025-01-05"
+        "FromTime": FromTime, // ex: "14:30"
+        "ToTime": ToTime, // ex: "18:00"
         "Description": Description,
         "Location": Location,
-        "file": (file!=null)?await MultipartFile.fromFile(
-          file.path,
-          filename: file.path.split('/').last,
-        ):"",
+        "file": (file != null)
+            ? await MultipartFile.fromFile(
+                file.path,
+                filename: file.path.split('/').last,
+              )
+            : "",
       });
       final response = await dioService.postWithToken(
         "api/Event/Create",
@@ -610,24 +612,20 @@ class managerCubit extends Cubit<ManagerStates> {
 
   /////////////////  getExperiences //////////////////////////
   Future<void> getExperiences({
-    required DateTime date,
+    required String date,
 
     // (http://app774.uat.toq.sa/LacrosseApi/api/Experience/GetExperiences?date=2025-02-25)
   }) async {
     // emit(InternalEventLoading());
 
-    print(
-        "/////send date////////////////////////${date.toLocal().toString().split(' ')[0]}");
     try {
       final response = await dioService.getWithToken(
         "api/Experience/GetExperiences",
         queryParameters: {
-          "date": "${date!.toLocal().toString().split(' ')[0]}"
-        },
+          "date":date,
         //    token: accessToken,
+        },
       );
-      print(
-          "GetExperiencesSuccessful:///////////////////////////////////////// ${response.data}");
       List<dynamic> data = response.data;
       final List<ExperiencesModel> Exp =
           data.map((json) => ExperiencesModel.fromJson(json)).toList();
@@ -702,6 +700,46 @@ class managerCubit extends Cubit<ManagerStates> {
       print("/////DeleteExperience////////${e.response!}////////////////");
 
       emit(DeleteExperienceFailure(e.response!.data.toString()));
+    }
+  }
+
+  Future<void> updateExperience({
+    required int experienceId,
+    required String appointment,
+    required String fromTime,
+    required String toTime,
+    required String longitude,
+    required String latitude,
+  }) async {
+    emit(UpdateExperienceLoading());
+
+    print("/////DeleteExperience////////////////////////");
+    try {
+      final response = await dioService.putWithToken(
+        "api/Experience/UpdateExperience",
+        data: {
+          "id": experienceId,
+          "appointment": appointment,
+          "fromTime": fromTime,
+          "toTime": toTime,
+          "longitude": longitude,
+          "latitude": latitude
+        },
+        //    token: accessToken,
+      );
+      print(
+          "DeleteExperienceSuccessful:///////////////////////////////////////// ${response.data}");
+      // List<dynamic> data = response.data;
+      // final List<ReservationModel> InternalEvent =
+      // data.map((json) => ReservationModel.fromJson(json)).toList();
+      print(response.data);
+      emit(UpdateExperienceSuccess());
+      print("DeleteExperienceSuccessful: ${response.data}");
+    } on DioException catch (e) {
+      print("/////DeleteExperience////////////////////////");
+      print("/////DeleteExperience////////${e.response!}////////////////");
+
+      emit(UpdateExperienceError(e.response!.data.toString()));
     }
   }
 }

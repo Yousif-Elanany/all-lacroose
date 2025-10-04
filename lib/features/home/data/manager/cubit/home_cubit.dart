@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:lacrosse/data/endPoints/endpoint.dart';
 import 'package:lacrosse/features/home/data/models/PlayGroundModel.dart';
 import 'package:lacrosse/features/home/data/models/aboutUnion.dart';
@@ -10,6 +11,7 @@ import 'package:meta/meta.dart';
 
 import '../../../../../data/Local/sharedPref/sharedPref.dart';
 import '../../../../../data/remote/dio.dart';
+import '../../../../ActivitesPage/data/models/activityModel.dart';
 import '../../../../auth/data/model/team.dart';
 import '../../../../eventsPage/data/model/natinalityModel.dart';
 import '../../models/PlayerModel.dart';
@@ -601,6 +603,65 @@ class HomeCubit extends Cubit<HomeStates> {
       }
     } catch (e) {
       emit(EditTeamFailure("مشكلة في الاتصال: $e"));
+    }
+  }
+
+  Future<void> deletePlayer({String? id}) async {
+    emit(DeletePlayerLoading()); // ✅ غيّر اسم الحالة لتعبّر عن الحذف
+    try {
+      final formData = FormData.fromMap({
+        "id": id,
+      });
+
+      final response = await dioService.deleteWithTokenFormData(
+        "api/Player", // ✅ لو الـ endpoint فعلاً لحذف اللاعب
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        print("✅ Player deleted successfully");
+        emit(DeletePlayerSuccess());
+        fetchAllPlayerData();
+        fetchAllTrainersData();
+      } else if (response.statusCode == 400) {
+        emit(DeletePlayerFailure("لم يتم حذف اللاعب ❌"));
+      } else {
+        emit(DeletePlayerFailure("حدث خطأ غير متوقع ⚠️"));
+      }
+    } catch (e) {
+      emit(DeletePlayerFailure("مشكلة في الاتصال: $e"));
+    }
+  }
+
+  Future<void> getFutureEvents({context}) async {
+    emit(GetHomeEventsLoading());
+
+    // print("/////send date////////////////////////${date.toLocal().toString().split(' ')[0]}");
+    try {
+      final response =
+          await dioService.getWithToken("api/Event", queryParameters: {
+        "langId": CacheHelper.getData(key: "lang") == "" ||
+          CacheHelper.getData(key: "lang") == null
+          ? "1"
+              : CacheHelper.getData(key: "lang")
+      }
+
+              //    token: accessToken,
+              );
+      print(
+          "GetExperiencesSuccessful:///////////////////////////////////////// ${response.data}");
+      List<dynamic> data = response.data;
+      final List<EventModel> Exp =
+          data.map((json) => EventModel.fromJson(json)).toList();
+      // print(response.data);
+
+      print("GetExperiencesSuccessful: ${response.data}");
+      emit(GetHomeEventsSuccess(Exp));
+    } on DioException catch (e) {
+      print("/////GetExperiences////////////////////////");
+      print("/////GetExperiences////////${e.response!}////////////////");
+
+      emit(GetHomeEventsFailure(e.response!.data.toString()));
     }
   }
 }

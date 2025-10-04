@@ -22,6 +22,7 @@ import '../../../data/Local/sharedPref/sharedPref.dart';
 
 import '../../../test3.dart';
 
+import '../../ActivitesPage/data/models/activityModel.dart';
 import '../../notficationPage/presentation/notification_page_manager.dart';
 import '../data/models/matchModel.dart';
 import '../data/models/model_team.dart';
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<MatchModel> matchList = [];
   late List<PlayerModel> playerList = [];
   late List<PlayerModel> trainersList = [];
-
+ late List<EventModel>   eventsList=[];
   late List<teamModels> TeamList = [];
   late List<AdvertisementModel> AdvertisemenList = [];
 
@@ -76,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<HomeCubit>().fetchAllPlayerData();
     context.read<HomeCubit>().fetchAllmatches();
     context.read<HomeCubit>().fetchAllTrainersData();
+    context.read<HomeCubit>().getFutureEvents();
 
     print(CacheHelper.getData(key: "FcmToken"));
     print(CacheHelper.getData(key: "accessToken"));
@@ -101,6 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           if (state is TrainerDataSuccess) {
             trainersList = state.trainerData;
+          }
+          if (state is GetHomeEventsSuccess) {
+            eventsList = state.listModel;
           }
         },
         builder: (context, state) {
@@ -379,7 +384,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-
+SizedBox(height: 25,),
                     /// الجزء المتحرك (المباريات + اللاعبين + الفرق)
                     Expanded(
                       child: SingleChildScrollView(
@@ -387,6 +392,95 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
+                              if (eventsList.isNotEmpty) ...[
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'activities'.tr(),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      GestureDetector(
+                                        onTap: () {
+                                          //navigateTo(context, AllImagesScreen());
+                                        },
+                                        child: Text(
+                                          'show_All'.tr(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xff207954),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 120,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: eventsList.length,
+                                    itemBuilder: (context, index) {
+                                      final item = eventsList[index];
+                                      return Container(
+                                        width: 110, // ✅ عرض مضغوط
+                                        margin: const EdgeInsets.symmetric(horizontal: 12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(10),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.withOpacity(0.15),
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min, // ✅ يخلي الارتفاع على قد المحتوى
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                                              child: Image.network(
+                                                item.img,
+                                                height: 85, // ✅ صورة مضبوطة
+                                                width: double.infinity,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error, stackTrace) =>
+                                                const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                                              child: Text(
+                                                item.name,
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+
+                              ],
+
                               // المباريات
                               if (matchList.isNotEmpty) ...[
                                 Padding(

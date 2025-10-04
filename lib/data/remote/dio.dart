@@ -384,11 +384,39 @@ class DioService {
       throw Exception("PUT With Token Error: ${e.toString()}");
     }
   }
+  Future<Response> deleteWithTokenFormData(
+      String endpoint, {
+        FormData? data,
+        Map<String, dynamic>? queryParameters,
+      }) async {
+    try {
+      final response = await _dio.request(
+        endpoint,
+        data: data,
+        queryParameters: queryParameters,
+        options: Options(
+          method: 'DELETE', // 👈 مهم جدًا
+          headers: {
+            'accept': '*/*',
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ${CacheHelper.getData(key: "accessToken")}',
+          },
+        ),
+      );
+      return response;
+    } on DioException catch (e) {
+      print('❌ Dio Error: ${e.response?.data}');
+      print('❌ Status code: ${e.response?.statusCode}');
+      throw Exception("DELETE With Token FormData Error: ${e.toString()}");
+    } catch (e) {
+      throw Exception("DELETE With Token FormData General Error: ${e.toString()}");
+    }
+  }
 
 
   Future<Response> deleteWithToken(
       String endpoint, {
-        Map<String, dynamic>? data,
+        dynamic? data,
         Map<String, dynamic>? queryParameters,
       }) async {
     try {
@@ -399,8 +427,7 @@ class DioService {
         options: Options(
           headers: {
             'Content-Type': 'application/json', // تعيين نوع المحتوى
-            'Authorization':
-            'Bearer ${CacheHelper.getData(key: "accessToken")}', //'Bearer ${CacheHelper.getData(key: "accessToken")}', // إذا كنت تستخدم مصادقة
+            'Authorization': 'Bearer ${CacheHelper.getData(key: "accessToken")}', //'Bearer ${CacheHelper.getData(key: "accessToken")}', // إذا كنت تستخدم مصادقة
           },
         ),
       );

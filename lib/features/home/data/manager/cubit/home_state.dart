@@ -1,4 +1,4 @@
-part of 'home_cubit.dart';
+  part of 'home_cubit.dart';
 
 @immutable
 sealed class HomeStates {}
@@ -278,3 +278,24 @@ class EditTeamFailure extends HomeStates {
   final String errorMessage;
   EditTeamFailure(this.errorMessage);
 }
+  class DeletePlayerLoading extends HomeStates {}
+
+  class DeletePlayerSuccess extends HomeStates {}
+
+  class DeletePlayerFailure extends HomeStates {
+    final String error;
+    DeletePlayerFailure(this.error);
+  }
+  class GetHomeEventsLoading extends HomeStates {}
+
+  class GetHomeEventsSuccess extends HomeStates {
+    final List<EventModel> listModel;
+
+    GetHomeEventsSuccess(this.listModel);
+  }
+
+  class GetHomeEventsFailure extends HomeStates {
+    final String errorMessage;
+
+    GetHomeEventsFailure(this.errorMessage);
+  }

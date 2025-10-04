@@ -31,20 +31,20 @@ class LoginModel {
   late final String refreshTokenExpiration;
 
   LoginModel.fromJson(Map<String, dynamic> json){
-    userId = json['userId'];
+    userId = json['userId']??"";
     displayName = json['displayName'] == null?"":json['displayName'];
     image = json['image']??"";
-    birthDate = json['birthDate'];
-    city = json['city'];
-    area = json['area'];
-    address = json['address'];
+    birthDate = json['birthDate']??"";
+    city = json['city']??"";
+    area = json['area']??"";
+    address = json['address']??"";
     message = null;
-    isAuthenticated = json['isAuthenticated'];
-    email = json['email'];
-    phoneNumber = json['phoneNumber'];
+    isAuthenticated = json['isAuthenticated']??"";
+    email = json['email']??"";
+    phoneNumber = json['phoneNumber']??"";
     roles = List.castFrom<dynamic, String>(json['roles']);
-    accessToken = json['accessToken'];
-    refreshTokenExpiration = json['refreshTokenExpiration'];
+    accessToken = json['accessToken']??"";
+    refreshTokenExpiration = json['refreshTokenExpiration']??"";
   }
 
   Map<String, dynamic> toJson() {

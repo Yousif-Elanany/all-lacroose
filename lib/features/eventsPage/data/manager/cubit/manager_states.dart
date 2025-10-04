@@ -199,4 +199,12 @@ class AddEventFailure extends ManagerStates {
 
   AddEventFailure(this.errorMessage);
 }
+class UpdateExperienceLoading extends ManagerStates {}
+
+class UpdateExperienceSuccess extends ManagerStates {}
+
+class UpdateExperienceError extends ManagerStates {
+  final String error;
+  UpdateExperienceError(this.error);
+}
 
