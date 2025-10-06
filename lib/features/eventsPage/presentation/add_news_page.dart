@@ -58,9 +58,16 @@ class _Add_news_pageState extends State<Add_news_page> {
                 type: 1, newsId: 0, content:link));
           }
         }
-        if (state is AddNewsEventSuccess){
-          _showAwesomeDialog(context);
+        if (state is AddNewsEventSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("news_added_success".tr()),
+              backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
         }
+
 
 
 
@@ -349,7 +356,7 @@ class _Add_news_pageState extends State<Add_news_page> {
                                   SizedBox( height:!newText?
                                   MediaQuery.of(context).size.height * 0.12:0),
                                   GestureDetector(
-                                    onTap:(state is AddNewsEventLoading)?null: () {
+                                    onTap:(state is AddNewsEventLoading)?null: () async {
                                       if (newText) {
                                         listDetails.add(NewsDetailModel(
                                             type: 0,
@@ -357,11 +364,11 @@ class _Add_news_pageState extends State<Add_news_page> {
                                             content: _detailsController.text));
                                       }
                                       if (formKey.currentState!.validate()) {
-                                        context.read<managerCubit>().addNewsEvent(
+                               await         context.read<managerCubit>().addNewsEvent(
                                             listNewsDetails: listDetails,
                                             description: _descriptionControler.text,
                                             title: _titleControler.text,
-                                            image: mainImageLink);
+                                            image: selectedImage1.toString()??"");
 
                                         _titleControler.text = "";
                                         _descriptionControler.text ="";

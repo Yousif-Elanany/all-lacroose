@@ -16,161 +16,123 @@ class MatchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //    width:MediaQuery.of(context).size.width*0.5,
-       height: 150,
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      width: MediaQuery.of(context).size.width * 0.7, // ✅ عرض ثابت يمنع الخروج
+      height: 150,
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
         color: Colors.grey.withOpacity(0.1),
-        //  border: Border.all(color: Colors.grey),
-
         borderRadius: BorderRadius.circular(12.0),
       ),
+      clipBehavior: Clip.hardEdge, // ✅ يمنع أي عنصر يخرج بره البوكس
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center, // ✅ توازن عمودي
           children: [
+            // ✅ الفريق الأول
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(matchList[index].firstTeamName,
-                    style: TextStyle(
-                      //  fontWeight: FontWeight.bold
-                      fontSize: 14
-
-                    )
-                      ),
-                // CircleAvatar(
-                //   backgroundColor: Colors.white,
-                //   radius: 15,
-                //   child: ClipOval(
-                //     child: Image.network(
-                //       matchList[index].firstTeamImage,
-                //       fit: BoxFit.cover, // لجعل الصورة تغطي الدائرة بشكل مناسب
-                //       width: 30, // يجب أن يكون أكبر أو يساوي `2 * radius`
-                //       height: 30, // يجب أن يكون أكبر أو يساوي `2 * radius`
-                //     ),
-                //   ),
-                // ),
+                Text(
+                  matchList[index].firstTeamName,
+                  style:  TextStyle(fontSize: 14),
+                  maxLines: 2, // ✅ سطر واحد فقط
+                  overflow: TextOverflow.clip, // ✅ يمنع النص الطويل يخرج
+                  softWrap: false, // ✅ يمنع اللف للسطر الجديد
+                  textAlign: TextAlign.center, // ✅ النص في المنتصف
+                ),
                 CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.white,
                   child: ClipOval(
-                    child:  matchList[index].firstTeamImage.isNotEmpty
+                    child: matchList[index].firstTeamImage.isNotEmpty
                         ? Image.network(
                       matchList[index].firstTeamImage,
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // لو الرابط فشل، نعرض الصورة من assets
-                        return Image.asset(
-                          "assets/images/c2.png",
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        );
-                      },
+                      errorBuilder: (context, error, stackTrace) =>
+                          Image.asset("assets/images/c2.png",
+                              width: 80, height: 80, fit: BoxFit.cover),
                     )
-                        : Image.asset(
-                      "assets/images/c2.png",
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
+                        : Image.asset("assets/images/c2.png",
+                        width: 80, height: 80, fit: BoxFit.cover),
                   ),
                 ),
-                // CircleAvatar(
-                //     radius: 20,
-                //     backgroundColor: Colors.white,
-                //     backgroundImage:  matchList[index].firstTeamImage.isNotEmpty
-                //         ? NetworkImage( matchList[index].firstTeamImage)
-                //         : AssetImage("assets/images/c2.png")
-                // ),
-                SizedBox(height: 6.0),
-                Text(matchList[index].totalFirstTeamGoals.toString(),
-                  style: TextStyle(
-                    // fontWeight: FontWeight.bold)
-                      fontSize: 14
-                  ),),
-                SizedBox(height: 6.0),                Row(children: [
-                  Text(
+                const SizedBox(height: 6.0),
+                Text(
+                  matchList[index].totalFirstTeamGoals.toString(),
+                  style: const TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 6.0),
+                Row(
+                  children: [
+                    Text(
+                      DateFormat("a h:mm").format(matchList[index].appointment),
+                      overflow: TextOverflow.fade, // ✅ يمنع النص الطويل يخرج
 
-                      DateFormat("a h:mm").format(matchList[index].appointment)
-                      ,
-                      style: TextStyle(
-                          fontSize: 10, color: Colors.grey)),
-                  Icon(Icons.access_time_outlined,size:12 ,color: Colors.grey,)
-                ],)
-
+                      style: const TextStyle(fontSize: 10, color: Colors.grey),
+                    ),
+                    const Icon(Icons.access_time_outlined,
+                        size: 12, color: Colors.grey),
+                  ],
+                ),
               ],
             ),
+
+            // ✅ النص VS
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(' VS',
-                  style: TextStyle(
-                      fontSize: 16, color: Colors.grey)),
+              child: Text('VS',
+                  style: const TextStyle(fontSize: 16, color: Colors.grey)),
             ),
+
+            // ✅ الفريق الثاني
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(matchList[index].secondTeamName,
-                    style: TextStyle(
-                       // fontWeight: FontWeight.bold)
-                    fontSize: 14
-                ),),
-                SizedBox(height: 6.0),
-                // CircleAvatar(
-                //     radius: 20,
-                //     backgroundColor: Colors.white,
-                //     backgroundImage:  matchList[index].secondTeamImage.isNotEmpty
-                //         ? NetworkImage( matchList[index].secondTeamImage)
-                //         : AssetImage("assets/images/c2.png")
-                // ),
+                Text(
+                  matchList[index].secondTeamName,
+                  style: const TextStyle(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 6.0),
                 CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.white,
                   child: ClipOval(
-                    child:  matchList[index].secondTeamImage.isNotEmpty
+                    child: matchList[index].secondTeamImage.isNotEmpty
                         ? Image.network(
                       matchList[index].secondTeamImage,
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // لو الرابط فشل، نعرض الصورة من assets
-                        return Image.asset(
-                          "assets/images/c2.png",
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        );
-                      },
+                      errorBuilder: (context, error, stackTrace) =>
+                          Image.asset("assets/images/c2.png",
+                              width: 80, height: 80, fit: BoxFit.cover),
                     )
-                        : Image.asset(
-                      "assets/images/c2.png",
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
+                        : Image.asset("assets/images/c2.png",
+                        width: 80, height: 80, fit: BoxFit.cover),
                   ),
                 ),
-                SizedBox(height: 6.0),
-                Text(matchList[index].totalSecondTeamGoals.toString(),
-                  style: TextStyle(
-                    // fontWeight: FontWeight.bold)
-                      fontSize: 14
-                  ),),
-                SizedBox(height: 6.0),
-
+                const SizedBox(height: 6.0),
+                Text(
+                  matchList[index].totalSecondTeamGoals.toString(),
+                  style: const TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 6.0),
                 Row(
-                  children:[ Text(
-                      DateFormat("MMM d").format(matchList[index].appointment)
-                      ,
-                      style: TextStyle(
-                          fontSize: 10, color: Colors.grey)),
-                    Icon(Icons.calendar_month_outlined,size:12 ,color: Colors.grey,)
-      ]
+                  children: [
+                    Text(
+                      DateFormat("MMM d").format(matchList[index].appointment),
+                      overflow: TextOverflow.ellipsis, // ✅ يمنع النص الطويل يخرج
+
+                      style: const TextStyle(fontSize: 10, color: Colors.grey),
+                    ),
+                    const Icon(Icons.calendar_month_outlined,
+                        size: 12, color: Colors.grey),
+                  ],
                 ),
               ],
             ),
@@ -178,5 +140,6 @@ class MatchWidget extends StatelessWidget {
         ),
       ),
     );
+
   }
 }

@@ -316,7 +316,7 @@ class managerCubit extends Cubit<ManagerStates> {
 
       print("AddEvent successful://////////////");
       print("AddEvent successful: ${response}");
-      emit(AddNewEventSuccess(model));
+      emit(AddNewEventSuccess());
     } on DioException catch (e) {
       print("/////AddEvent////////${e.response!.data}////////////////");
       print("////////AddEvent/////////////////////");
@@ -358,7 +358,7 @@ class managerCubit extends Cubit<ManagerStates> {
 
       print("AddEvent successful://////////////");
       print("AddEvent successful: ${response}");
-      //  emit(AddNewEventSuccess(model));
+        emit(AddNewEventSuccess());
     } on DioException catch (e) {
       print("/////AddEvent////////${e.response!.data}////////////////");
       print("////////Login/////////////////////");
@@ -423,15 +423,17 @@ class managerCubit extends Cubit<ManagerStates> {
   }) async {
     emit(AddNewsEventLoading());
     try {
+
+      FormData formData = FormData.fromMap({
+        "LangId": 1,
+        "File": image == "" ? null : image,
+        "Title": title,
+        "Description": description,
+        "NewsDetails": detailsToJsonList(listNewsDetails),
+      });
       final response = await dioService.postWithToken(
         "api/News/Create",
-        data: {
-          "langId": 1,
-          "img": image,
-          "title": title,
-          "description": description,
-          "newsDetails": detailsToJsonList(listNewsDetails)
-        },
+        data:formData,
       );
 
       print(response.data);

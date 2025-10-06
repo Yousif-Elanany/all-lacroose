@@ -124,9 +124,7 @@ class DeleteExperienceFailure extends ManagerStates {
 class AddNewEventLoading extends ManagerStates {}
 
 class AddNewEventSuccess extends ManagerStates {
-  final AddEventModel model;
 
-  AddNewEventSuccess(this.model);
 }
 
 class AddNewEventFailure extends ManagerStates {

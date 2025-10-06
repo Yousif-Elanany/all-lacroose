@@ -252,7 +252,18 @@ class EditPlayGroundFailure extends HomeStates {
   final String errorMessage;
   EditPlayGroundFailure(this.errorMessage);
 }
+  class DeletePlayGroundLoading extends HomeStates {}
 
+  // Success
+  class DeletePlayGroundSuccess extends HomeStates {
+
+  }
+
+  // Failure
+  class DeletePlayGroundFailure extends HomeStates {
+    final String errorMessage;
+    DeletePlayGroundFailure(this.errorMessage);
+  }
 class EditMatchLoading extends HomeStates {}
 
 // Success
@@ -278,6 +289,18 @@ class EditTeamFailure extends HomeStates {
   final String errorMessage;
   EditTeamFailure(this.errorMessage);
 }
+  class DeleteTeamLoading extends HomeStates {}
+
+  // Success
+  class DeleteTeamSuccess extends HomeStates {
+
+  }
+
+  // Failure
+  class DeleteTeamFailure extends HomeStates {
+    final String errorMessage;
+    DeleteTeamFailure(this.errorMessage);
+  }
   class DeletePlayerLoading extends HomeStates {}
 
   class DeletePlayerSuccess extends HomeStates {}
@@ -286,6 +309,7 @@ class EditTeamFailure extends HomeStates {
     final String error;
     DeletePlayerFailure(this.error);
   }
+
   class GetHomeEventsLoading extends HomeStates {}
 
   class GetHomeEventsSuccess extends HomeStates {

@@ -36,7 +36,7 @@ class _Add_eventState extends State<Add_event> {
   List<PlayerModel> all_Participate = [];
 
   bool is_match = true;
-  bool is_other = true;
+  bool is_other = false;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final CustomDropdownController dropdownController =

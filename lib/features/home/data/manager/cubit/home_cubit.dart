@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:lacrosse/data/endPoints/endpoint.dart';
 import 'package:lacrosse/features/home/data/models/PlayGroundModel.dart';
@@ -606,6 +607,31 @@ class HomeCubit extends Cubit<HomeStates> {
     }
   }
 
+  Future<void> deleteClub({
+    int? id,
+  }) async {
+    emit(DeleteTeamLoading()); // حالة اللودنج
+    try {
+      final response = await dioService.deleteWithToken(
+        "api/Team",
+        queryParameters: {
+          "id": id,
+        },
+      );
+      if (response.statusCode == 200) {
+        print("Player updated successfully");
+        emit(DeleteTeamSuccess());
+        fetchAlltEAMS();
+      } else if (response.statusCode == 400) {
+        emit(DeleteTeamFailure("team_delete_error".tr()));
+      } else {
+        emit(DeleteTeamFailure("team_delete_error".tr()));
+      }
+    } catch (e) {
+      emit(DeleteTeamFailure("team_delete_error".tr()));
+    }
+  }
+
   Future<void> deletePlayer({String? id}) async {
     emit(DeletePlayerLoading()); // ✅ غيّر اسم الحالة لتعبّر عن الحذف
     try {
@@ -624,12 +650,40 @@ class HomeCubit extends Cubit<HomeStates> {
         fetchAllPlayerData();
         fetchAllTrainersData();
       } else if (response.statusCode == 400) {
-        emit(DeletePlayerFailure("لم يتم حذف اللاعب ❌"));
+        emit(DeletePlayerFailure("error_occurred".tr()));
       } else {
-        emit(DeletePlayerFailure("حدث خطأ غير متوقع ⚠️"));
+        emit(DeletePlayerFailure("error_occurred".tr()));
       }
     } catch (e) {
-      emit(DeletePlayerFailure("مشكلة في الاتصال: $e"));
+      emit(DeletePlayerFailure("error_occurred".tr()));
+    }
+  }
+
+  Future<void> deletePlayGround({int? id}) async {
+    emit(DeletePlayGroundLoading()); // ✅ غيّر اسم الحالة لتعبّر عن الحذف
+    try {
+      final formData = FormData.fromMap({
+        "id": id,
+      });
+
+      final response = await dioService.deleteWithToken(
+        "api/Playground/DeletePlayground", // ✅ لو الـ endpoint فعلاً لحذف اللاعب
+        queryParameters: {
+          "id": id,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print("✅ Player deleted successfully");
+        emit(DeletePlayGroundSuccess());
+        fetchPlayGround();
+      } else if (response.statusCode == 400) {
+        emit(DeletePlayGroundFailure("error_occurred".tr()));
+      } else {
+        emit(DeletePlayGroundFailure("error_occurred".tr()));
+      }
+    } catch (e) {
+      emit(DeletePlayGroundFailure("error_occurred".tr()));
     }
   }
 
@@ -641,9 +695,9 @@ class HomeCubit extends Cubit<HomeStates> {
       final response =
           await dioService.getWithToken("api/Event", queryParameters: {
         "langId": CacheHelper.getData(key: "lang") == "" ||
-          CacheHelper.getData(key: "lang") == null
-          ? "1"
-              : CacheHelper.getData(key: "lang")
+                CacheHelper.getData(key: "lang") == null
+            ? "1"
+            : CacheHelper.getData(key: "lang")
       }
 
               //    token: accessToken,

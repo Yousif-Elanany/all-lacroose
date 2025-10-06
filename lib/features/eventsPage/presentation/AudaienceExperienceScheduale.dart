@@ -153,15 +153,15 @@ class _AudienceExperienceScheduleState extends State<AudienceExperienceSchedule>
                               child: Row(
                                 children: [
                                   Text(
-                                    CacheHelper.getData(key: "lang") == 1
+                                    CacheHelper.getData(key: "lang").toString() == "1"
                                         ? _getArabicMonthName(DateTime.now().month)
-                                        : _getEnglishMonthName(DateTime.now()
-                                        .month),  // "يناير ".tr(),
-                                    style: TextStyle(
+                                        : _getEnglishMonthName(DateTime.now().month),
+                                    style: const TextStyle(
                                       color: Color(0xff185A3F),
                                       fontSize: 16,
                                     ),
                                   ),
+
                                   // Text(
                                   //   " ٢٠٢٥",
                                   //   style: TextStyle(
@@ -425,6 +425,7 @@ class _AudienceExperienceScheduleState extends State<AudienceExperienceSchedule>
     ];
     return months[month - 1];
   }
+
   String _getEnglishMonthName(int month) {
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June',
@@ -432,6 +433,7 @@ class _AudienceExperienceScheduleState extends State<AudienceExperienceSchedule>
     ];
     return months[month - 1];
   }
+
   String _getArabicDayName(int weekday) {
     const days = ['الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'];
     return days[weekday - 1];

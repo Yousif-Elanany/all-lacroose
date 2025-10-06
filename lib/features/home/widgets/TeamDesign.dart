@@ -19,16 +19,14 @@ class Teamdesign extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Image.network(
-            fit: BoxFit.fill,
-            model.img,
-            height: 50,
-            width: 50,
-            errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-              // في حالة حدوث خطأ، هات صورة من assets
-              return Center(child: Image.asset('assets/images/c3.png',height: 50,width: 50,));  // ضع اسم الصورة في assets
-            },
-
+          child: ClipOval(
+            child: Image.network(
+              model.img ?? "",
+              fit: BoxFit.cover,
+              height: 50,
+              width: 50,
+              errorBuilder: (context, error, stackTrace) => errorImage(),
+            ),
           ),
         ),
         Spacer(),
@@ -42,6 +40,18 @@ class Teamdesign extends StatelessWidget {
         ),
 
       ],
+    );
+  }
+  Widget errorImage() {
+    return Container(
+      color: const Color(0xff185A3F),
+      child: const Center(
+        child: Icon(
+          Icons.warning_amber_outlined,
+          color: Colors.white,
+          size: 40,
+        ),
+      ),
     );
   }
 }

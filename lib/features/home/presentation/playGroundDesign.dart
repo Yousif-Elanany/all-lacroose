@@ -27,7 +27,7 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green[400],
+        backgroundColor: Color(0xff185A3F),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
@@ -41,159 +41,176 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
         ),
         centerTitle: true,
         actions: [
-          CacheHelper.getData(key: "roles")  == "Admin"  ?     IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              TextEditingController nameController = TextEditingController();
-              double? selectedLat;
-              double? selectedLng;
+          CacheHelper.getData(key: "roles") == "Admin"
+              ? IconButton(
+                  icon: Icon(Icons.add, color: Colors.white),
+                  onPressed: () {
+                    TextEditingController nameController =
+                        TextEditingController();
+                    double? selectedLat;
+                    double? selectedLng;
 
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (context) {
-                  final _formKey = GlobalKey<FormState>();
-                  TextEditingController nameController =
-                      TextEditingController();
-                  double? selectedLat;
-                  double? selectedLng;
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      builder: (context) {
+                        final _formKey = GlobalKey<FormState>();
+                        TextEditingController nameController =
+                            TextEditingController();
+                        double? selectedLat;
+                        double? selectedLng;
 
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                      left: 16,
-                      right: 16,
-                      top: 16,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "addPlayGroundName".tr(),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                            left: 16,
+                            right: 16,
+                            top: 16,
                           ),
-                          SizedBox(height: 20),
-
-                          // =======================
-                          // الفورم
-                          // =======================
-                          Form(
-                            key: _formKey,
-                            child: TextFormField(
-                              controller: nameController,
-                              decoration: InputDecoration(
-                                labelText: "name".tr(),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "addPlayGroundName".tr(),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 16, horizontal: 12),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return "Required".tr();
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 15),
+                                SizedBox(height: 20),
 
-                          // =======================
-                          // زر تحديد الموقع على الخريطة
-                          // =======================
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green[400],
-                              minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
-                            icon: Icon(
-                              Icons.location_on,
-                              size: 24,
-                              color: Colors.white,
-                            ),
-                            label: Text(
-                              "addPlayGroundLocation".tr(),
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white),
-                            ),
-                            onPressed: () async {
-                              final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => SelectLocationMapScreen()),
-                              );
+                                // =======================
+                                // الفورم
+                                // =======================
+                                Form(
+                                  key: _formKey,
+                                  child: TextFormField(
+                                    controller: nameController,
+                                    decoration: InputDecoration(
+                                      labelText: "name".tr(),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 16, horizontal: 12),
+                                    ),
+                                    validator: (value) {
+                                      if (value == null ||
+                                          value.trim().isEmpty) {
+                                        return "Required".tr();
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 15),
 
-                              if (result != null) {
-                                selectedLat = result.latitude;
-                                selectedLng = result.longitude;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text("تم اختيار الموقع".tr())),
-                                );
-                              }
-                            },
-                          ),
-                          SizedBox(height: 15),
-
-                          // =======================
-                          // زر إضافة الملعب
-                          // =======================
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green[700],
-                              minimumSize: Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
-                            child: Text(
-                              "addPlayGround".tr(),
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white),
-                            ),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                if (selectedLat == null ||
-                                    selectedLng == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text("addPlayGroundLocation".tr())),
-                                  );
-                                  return;
-                                }
-
-                                // استدعاء الـ API لإضافة الملعب
-                                await context.read<HomeCubit>().addPlayGround(
-                                      name: nameController.text.trim(),
-                                      lat: selectedLat.toString(),
-                                      long: selectedLng.toString(),
+                                // =======================
+                                // زر تحديد الموقع على الخريطة
+                                // =======================
+                                ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green[400],
+                                    minimumSize: Size(double.infinity, 50),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                  ),
+                                  icon: Icon(
+                                    Icons.location_on,
+                                    size: 24,
+                                    color: Colors.white,
+                                  ),
+                                  label: Text(
+                                    "addPlayGroundLocation".tr(),
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white),
+                                  ),
+                                  onPressed: () async {
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              SelectLocationMapScreen()),
                                     );
 
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text("add successfully".tr())),
-                                );
-                              }
-                            },
+                                    if (result != null) {
+                                      selectedLat = result.latitude;
+                                      selectedLng = result.longitude;
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text("تم اختيار الموقع".tr())),
+                                      );
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 15),
+
+                                // =======================
+                                // زر إضافة الملعب
+                                // =======================
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green[700],
+                                    minimumSize: Size(double.infinity, 50),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                  ),
+                                  child: Text(
+                                    "addPlayGround".tr(),
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white),
+                                  ),
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      if (selectedLat == null ||
+                                          selectedLng == null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  "addPlayGroundLocation"
+                                                      .tr())),
+                                        );
+                                        return;
+                                      }
+
+                                      // استدعاء الـ API لإضافة الملعب
+                                      await context
+                                          .read<HomeCubit>()
+                                          .addPlayGround(
+                                            name: nameController.text.trim(),
+                                            lat: selectedLat.toString(),
+                                            long: selectedLng.toString(),
+                                          );
+
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text("add successfully".tr())),
+                                      );
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 20),
+                              ],
+                            ),
                           ),
-                          SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ) ;
-            },
-          ) :SizedBox(),
+                        );
+                      },
+                    );
+                  },
+                )
+              : SizedBox(),
         ],
       ),
       body: Column(
@@ -233,6 +250,9 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
                   if (state is EditPlayGroundSuccess) {
                     context.read<HomeCubit>().fetchPlayGround();
                   }
+                  if (state is DeletePlayGroundSuccess) {
+                    context.read<HomeCubit>().fetchPlayGround();
+                  }
 
                   return ListView.builder(
                     padding: const EdgeInsets.all(12),
@@ -247,9 +267,7 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
-                          onTap: () {
-
-                          },
+                          onTap: () {},
                           contentPadding: const EdgeInsets.all(12),
                           leading: Container(
                             width: 60,
@@ -282,11 +300,11 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => MapScreen(
-                                        latitude:
-                                        double.tryParse(pg.latitude ?? "0") ??
+                                        latitude: double.tryParse(
+                                                pg.latitude ?? "0") ??
                                             0.0,
-                                        longitude:
-                                        double.tryParse(pg.longitude ?? "0") ??
+                                        longitude: double.tryParse(
+                                                pg.longitude ?? "0") ??
                                             0.0,
                                         name: pg.name ?? "الملعب",
                                       ),
@@ -295,14 +313,27 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
                                 },
                               ),
                               SizedBox(width: 10),
-                              CacheHelper.getData(key: "roles")  == "Admin" ?               IconButton(
-                                icon: Icon(Icons.edit,
-                                    color: Colors.blue, size: 22),
-                                onPressed: () {
-                                  // هنا تضيف كود تعديل الملعب
-                                     showEditPlaygroundSheet(context, pg); // مثال على Bottom Sheet للتعديل
-                                },
-                              ) :SizedBox(),
+                              CacheHelper.getData(key: "roles") == "Admin"
+                                  ? Row(
+                                      children: [
+                                        IconButton(
+                                          icon: Icon(Icons.edit,
+                                              color: Colors.blue, size: 22),
+                                          onPressed: () {
+                                            // هنا تضيف كود تعديل الملعب
+                                            showEditPlaygroundSheet(context,
+                                                pg); // مثال على Bottom Sheet للتعديل
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.delete,
+                                              color: Colors.red, size: 22),
+                                          onPressed: () {
+                                            showDeleteDialog(context, pg.id!);                                          },
+                                        ),
+                                      ],
+                                    )
+                                  : SizedBox(),
                             ],
                           ),
                         ),
@@ -319,10 +350,61 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
       ),
     );
   }
+
+  void showDeleteDialog(BuildContext context, int playGroundId) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("delete_team_title".tr()), // 🔸 العنوان
+        content: Text("delete_team".tr()), // 🔸 النص
+// 🔸 ترجمة نص الحذف
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("cancel".tr()),
+          ),
+          BlocConsumer<HomeCubit, HomeStates>(
+            listener: (context, state) {
+              if (state is DeleteTeamSuccess) {
+                Navigator.pop(context); // إغلاق الـ Dialog
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Gob_done_successfully".tr())),
+                );
+              } else if (state is DeleteTeamFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("error_occurred".tr())),
+                );
+              }
+            },
+            builder: (context, state) {
+              if (state is DeleteTeamLoading) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return TextButton(
+                onPressed: () async{
+                await  context.read<HomeCubit>().deletePlayGround(id: playGroundId);
+                Navigator.pop(context);
+                },
+                child: Text(
+                  "delete".tr(),
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   void showEditPlaygroundSheet(BuildContext context, PlayGroundModel pg) {
     final _formKey = GlobalKey<FormState>();
     TextEditingController nameController =
-    TextEditingController(text: pg.name ?? "");
+        TextEditingController(text: pg.name ?? "");
     double? selectedLat = double.tryParse(pg.latitude ?? "");
     double? selectedLng = double.tryParse(pg.longitude ?? "");
 
@@ -363,7 +445,7 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       contentPadding:
-                      EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                          EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -395,9 +477,9 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => SelectLocationMapScreen(
-                            lat: selectedLat,
-                            long: selectedLng,
-                          )),
+                                lat: selectedLat,
+                                long: selectedLng,
+                              )),
                     );
 
                     if (result != null) {
@@ -438,11 +520,11 @@ class _PlayGroundPageState extends State<PlayGroundPage> {
 
                       // استدعاء الـ API لتعديل الملعب
                       await context.read<HomeCubit>().editPlayGround(
-                        id: pg.id,
-                        name: nameController.text.trim(),
-                        lat: selectedLat.toString(),
-                        long: selectedLng.toString(),
-                      );
+                            id: pg.id,
+                            name: nameController.text.trim(),
+                            lat: selectedLat.toString(),
+                            long: selectedLng.toString(),
+                          );
 
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(

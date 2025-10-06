@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -56,11 +58,8 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
     emit(InternalEventByIdLoading());
     try {
       final response = await dioService.getWithToken(
-        "api/InternalEvent/getById",
-        queryParameters: {
-          "id": eventID
-          //activityId
-        },
+        "api/InternalEvent/getById?id=$eventID",
+
       );
       //  print(response);
       dynamic data = response.data;
@@ -214,11 +213,10 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
       final response = await dioService.deleteWithToken(
           "api/InternalEvent/deleteInternalEvent",
           queryParameters: {"id": id}
-        //    token: accessToken,
-      );
+          //    token: accessToken,
+          );
       print(
-          "DeleteEventResponse:///////////////////////////////////////// ${response
-              .data}");
+          "DeleteEventResponse:///////////////////////////////////////// ${response.data}");
       // print(response.data);
 
       print("GetExperiencesSuccessful: ${response.data}");
@@ -229,29 +227,29 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
 
       emit(DeleteInternalEventFailure(e.response!.data.toString()));
     }
-
-
   }
-  Future<void> getFutureEvents({BuildContext?
-   context}) async {
+
+  Future<void> getFutureEvents({BuildContext? context}) async {
     emit(GetEventsLoading());
 
     // print("/////send date////////////////////////${date.toLocal().toString().split(' ')[0]}");
     try {
-      final response = await dioService.getWithToken(
-        "api/Event",
-        queryParameters: {
-          "langid":context?.locale.languageCode == 'ar'?1:context?.locale.languageCode == "en" ? 2:1 ,
-        }
+      final response =
+          await dioService.getWithToken("api/Event", queryParameters: {
+        "langid": context?.locale.languageCode == 'ar'
+            ? 1
+            : context?.locale.languageCode == "en"
+                ? 2
+                : 1,
+      }
 
-        //    token: accessToken,
-      );
+              //    token: accessToken,
+              );
       print(
-          "GetExperiencesSuccessful:///////////////////////////////////////// ${response
-              .data}");
+          "GetExperiencesSuccessful:///////////////////////////////////////// ${response.data}");
       List<dynamic> data = response.data;
       final List<EventModel> Exp =
-      data.map((json) => EventModel.fromJson(json)).toList();
+          data.map((json) => EventModel.fromJson(json)).toList();
       // print(response.data);
 
       print("GetExperiencesSuccessful: ${response.data}");
@@ -263,4 +261,89 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
       emit(GetEventsFailure(e.response!.data.toString()));
     }
   }
+
+  Future<void> deleteEvent({int? id}) async {
+    emit(DeleteEventLoading());
+
+    try {
+      final response = await dioService
+          .deleteWithToken("api/Event", queryParameters: {"id": id}
+              //    token: accessToken,
+              );
+      print(
+          "DeleteEventResponse:///////////////////////////////////////// ${response.data}");
+      // print(response.data);
+
+      print("GetExperiencesSuccessful: ${response.data}");
+      emit(DeleteEventSuccess());
+      getAllInternalEventsForNationalTeam();
+      getAllExperiences();
+      getFutureEvents();
+    } on DioException catch (e) {
+      print("/////GetExperiences////////////////////////");
+      print("/////GetExperiences////////${e.response!}////////////////");
+
+      emit(DeleteEventFailure(e.response!.data.toString()));
+    }
+  }
+  Future<void> editEvent({
+    int? id,
+    String? name,
+    String? location,
+    String? description,
+    String? fromDay,
+    String? toDay,
+    String? fromTime,
+    String? toTime,
+  }) async {
+    emit(EditEventLoading());
+
+    try {
+      // إعداد FormData
+      var data = FormData.fromMap({
+        'Id': id?.toString() ?? "",
+        'Name': name ?? "",
+        'Location': location ?? "",
+        'Description': description ?? "",
+        'Notes': '""',
+        'MapLink': '""',
+        'FromDay': fromDay ?? "",
+        'ToDay': toDay ?? "",
+        'FromTime': fromTime ?? "",
+        'ToTime': toTime ?? ""
+      });
+      // إضافة الصورة لو موجودة
+
+
+
+      final response = await dioService.putWithToken(
+        "api/Event/Update",
+        data: data,
+      );
+
+      // التعامل مع الأكواد المختلفة
+      if (response.statusCode == 200) {
+        print("EditEventResponse: ${response.data}");
+        emit(EditEventSuccess());
+        // إعادة تحميل البيانات
+        getAllInternalEventsForNationalTeam();
+        getAllExperiences();
+        getFutureEvents();
+      } else if (response.statusCode == 400) {
+        print("Bad Request: ${response.data}");
+        emit(EditEventFailure("حدث خطأ: البيانات غير صحيحة"));
+      } else {
+        print("Other status: ${response.statusCode} - ${response.data}");
+        emit(EditEventFailure("حدث خطأ غير متوقع"));
+      }
+    } on DioException catch (e) {
+      print("EditEventError: ${e.response?.data}");
+      emit(EditEventFailure(e.response?.data?.toString() ?? "حدث خطأ في الاتصال"));
+    } catch (e) {
+      print("UnexpectedError: $e");
+      emit(EditEventFailure("حدث خطأ غير متوقع"));
+    }
+  }
+
+
 }

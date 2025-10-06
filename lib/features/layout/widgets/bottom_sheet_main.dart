@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 
-import '../../eventsPage/presentation/add_player_trainer.dart';
+
+import 'package:flutter/material.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final String title;

@@ -29,6 +29,7 @@ import '../data/models/model_team.dart';
 import '../widgets/TeamDesign.dart';
 import '../widgets/matchDesign.dart';
 import '../widgets/terms.dart';
+import 'allEvents.dart';
 import 'clubs_Page.dart';
 import 'gameRolePage.dart';
 import 'matchesPage.dart';
@@ -45,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<MatchModel> matchList = [];
   late List<PlayerModel> playerList = [];
   late List<PlayerModel> trainersList = [];
- late List<EventModel>   eventsList=[];
+  late List<EventModel> eventsList = [];
   late List<teamModels> TeamList = [];
   late List<AdvertisementModel> AdvertisemenList = [];
 
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "name": "All stadiums".tr(),
       "image":
-      "assets/images/lacrosse 1@3x.png", // Replace with your asset path
+          "assets/images/lacrosse 1@3x.png", // Replace with your asset path
     },
   ];
   @override
@@ -348,29 +349,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context, index) {
                           final item = items[index];
                           return Container(
-                            width: MediaQuery.of(context).size.width / items.length, // توزيع متساوي
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            width: MediaQuery.of(context).size.width /
+                                items.length, // توزيع متساوي
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: GestureDetector(
                               onTap: () {
                                 if (index == 1) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => GameRolesPage()),
+                                    MaterialPageRoute(
+                                        builder: (context) => GameRolesPage()),
                                   );
                                 } else if (index == 2) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => AboutUnionPage()),
+                                    MaterialPageRoute(
+                                        builder: (context) => AboutUnionPage()),
                                   );
                                 } else if (index == 0) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => NearestClub()),
+                                    MaterialPageRoute(
+                                        builder: (context) => NearestClub()),
                                   );
                                 } else if (index == 3) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => PlayGroundPage()),
+                                    MaterialPageRoute(
+                                        builder: (context) => PlayGroundPage()),
                                   );
                                 }
                               },
@@ -384,7 +391,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-SizedBox(height: 25,),
+                    SizedBox(
+                      height: 25,
+                    ),
+
                     /// الجزء المتحرك (المباريات + اللاعبين + الفرق)
                     Expanded(
                       child: SingleChildScrollView(
@@ -392,9 +402,10 @@ SizedBox(height: 25,),
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              if (eventsList.isNotEmpty) ...[
+                              if (CacheHelper.getData(key: "roles") == "Admin")       if (eventsList.isNotEmpty) ...[
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 10),
                                   child: Row(
                                     children: [
                                       Text(
@@ -407,7 +418,7 @@ SizedBox(height: 25,),
                                       const Spacer(),
                                       GestureDetector(
                                         onTap: () {
-                                          //navigateTo(context, AllImagesScreen());
+                                          navigateTo(context, HomeActivities());
                                         },
                                         child: Text(
                                           'show_All'.tr(),
@@ -430,36 +441,49 @@ SizedBox(height: 25,),
                                       final item = eventsList[index];
                                       return Container(
                                         width: 110, // ✅ عرض مضغوط
-                                        margin: const EdgeInsets.symmetric(horizontal: 12),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 12),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.grey.withOpacity(0.15),
+                                              color:
+                                                  Colors.grey.withOpacity(0.15),
                                               blurRadius: 4,
                                               offset: const Offset(0, 2),
                                             ),
                                           ],
                                         ),
                                         child: Column(
-                                          mainAxisSize: MainAxisSize.min, // ✅ يخلي الارتفاع على قد المحتوى
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize
+                                              .min, // ✅ يخلي الارتفاع على قد المحتوى
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
                                             ClipRRect(
-                                              borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                                              borderRadius:
+                                                  const BorderRadius.vertical(
+                                                      top: Radius.circular(10)),
                                               child: Image.network(
                                                 item.img,
                                                 height: 85, // ✅ صورة مضبوطة
                                                 width: double.infinity,
                                                 fit: BoxFit.cover,
-                                                errorBuilder: (context, error, stackTrace) =>
-                                                const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    const Icon(
+                                                        Icons.broken_image,
+                                                        size: 40,
+                                                        color: Colors.grey),
                                               ),
                                             ),
                                             const SizedBox(height: 4),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
                                               child: Text(
                                                 item.name,
                                                 textAlign: TextAlign.center,
@@ -478,7 +502,6 @@ SizedBox(height: 25,),
                                     },
                                   ),
                                 )
-
                               ],
 
                               // المباريات
@@ -512,17 +535,30 @@ SizedBox(height: 25,),
                                   ),
                                 ),
                                 SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.14,
+                                  height: MediaQuery.of(context).size.height * 0.14,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
+                                    physics: const BouncingScrollPhysics(),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8),
                                     itemCount: matchList.length,
                                     itemBuilder: (context, index) {
-                                      return MatchWidget(
-                                          matchList: matchList, index: index);
+                                      return Container(
+                                        width: MediaQuery.of(context).size.width * 0.6, // ✅ عرض ثابت يمنع الزيادة
+                                        margin: EdgeInsets.only(right: index == matchList.length - 1 ? 0 : 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.white,
+                                        ),
+                                        clipBehavior: Clip.hardEdge, // ✅ يمنع خروج المحتوى
+                                        child: MatchWidget(
+                                          matchList: matchList,
+                                          index: index,
+                                        ),
+                                      );
                                     },
                                   ),
-                                ),
+                                )
+
                               ],
 
                               // اللاعبين
@@ -555,7 +591,8 @@ SizedBox(height: 25,),
                               ),
 
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.11,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.11,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: playerList.length,
@@ -565,10 +602,11 @@ SizedBox(height: 25,),
                                           EdgeInsets.symmetric(horizontal: 8.0),
                                       decoration: BoxDecoration(
                                         color: Colors.grey.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                       ),
-                                      child:
-                                          PlayerWidget(model: playerList[index]),
+                                      child: PlayerWidget(
+                                          model: playerList[index]),
                                     );
                                   },
                                 ),
@@ -601,20 +639,22 @@ SizedBox(height: 25,),
                                 ),
                               ),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.11,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.11,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: trainersList.length,
                                   itemBuilder: (context, index) {
                                     return Container(
                                       margin:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                          EdgeInsets.symmetric(horizontal: 8.0),
                                       decoration: BoxDecoration(
                                         color: Colors.grey.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                       ),
-                                      child:
-                                      PlayerWidget(model: trainersList[index]),
+                                      child: PlayerWidget(
+                                          model: trainersList[index]),
                                     );
                                   },
                                 ),
@@ -650,7 +690,8 @@ SizedBox(height: 25,),
                                 ),
                               ),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.11,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.11,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: TeamList.length,
@@ -661,7 +702,8 @@ SizedBox(height: 25,),
                                           EdgeInsets.symmetric(horizontal: 8.0),
                                       decoration: BoxDecoration(
                                         color: Colors.grey.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                       ),
                                       child: Teamdesign(model: TeamList[index]),
                                     );

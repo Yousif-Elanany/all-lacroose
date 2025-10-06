@@ -11,42 +11,34 @@ import 'package:lacrosse/features/home/widgets/editClubSheet.dart';
 import '../data/models/model_team.dart';
 import '../widgets/customPlayerWidget.dart';
 
-
-
 class ClubScreen extends StatefulWidget {
-
   @override
   _ClubScreenState createState() => _ClubScreenState();
 }
 
 class _ClubScreenState extends State<ClubScreen> {
-
-  List<teamModels> allClub=[];
-
-
+  List<teamModels> allClub = [];
 
   @override
   void initState() {
     super.initState();
-    context.read<HomeCubit>().fetchAlltEAMS(
-    ); // جلب البيانات
+    context.read<HomeCubit>().fetchAlltEAMS(); // جلب البيانات
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         body: BlocConsumer<HomeCubit, HomeStates>(
           listener: (context, state) {
-            if(state is TeamsDataSuccess){
-              allClub=state.teamsData;
+            if (state is TeamsDataSuccess) {
+              allClub = state.teamsData;
               // print("mmmmmmmmmmm");
               // print(allClub);
-
             }
           },
           builder: (context, state) {
-            if  ( allClub.isNotEmpty){
+            if (allClub.isNotEmpty) {
               return Stack(children: [
                 Stack(children: [
                   SizedBox(
@@ -56,10 +48,14 @@ class _ClubScreenState extends State<ClubScreen> {
                         image: DecorationImage(
                           image: AssetImage(
                               'assets/images/top bar.png'), // Replace with your asset path
-                          fit: BoxFit.cover, // Adjust to control how the image fits
+                          fit: BoxFit
+                              .cover, // Adjust to control how the image fits
                         ),
                         gradient: LinearGradient(
-                          colors: [Colors.green.shade900, Colors.green.shade700],
+                          colors: [
+                            Colors.green.shade900,
+                            Colors.green.shade700
+                          ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
@@ -67,8 +63,8 @@ class _ClubScreenState extends State<ClubScreen> {
                     ),
                   ),
                   Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 45.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 45.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -79,12 +75,12 @@ class _ClubScreenState extends State<ClubScreen> {
                           child: Row(
                             children: [
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   Navigator.of(context).pop();
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 0.0, top: 0),
+                                  padding:
+                                      const EdgeInsets.only(left: 0.0, top: 0),
                                   child: Container(
                                     height: 40,
                                     width: 40,
@@ -94,10 +90,8 @@ class _ClubScreenState extends State<ClubScreen> {
                                         Radius.circular(8),
                                       ),
                                     ),
-                                    child: Icon(
-                                        Icons.arrow_back_ios_outlined,
-                                        color: Color(0xff185A3F),
-                                        size: 20),
+                                    child: Icon(Icons.arrow_back_ios_outlined,
+                                        color: Color(0xff185A3F), size: 20),
                                   ),
                                 ),
                               ),
@@ -112,7 +106,7 @@ class _ClubScreenState extends State<ClubScreen> {
                             ],
                           ),
                         ),
-                    //   Icon(Icons.search, color: Color(0xff185A3F), size: 30),
+                        //   Icon(Icons.search, color: Color(0xff185A3F), size: 30),
                       ],
                     ),
                   ),
@@ -120,20 +114,20 @@ class _ClubScreenState extends State<ClubScreen> {
                 // محتوى الشاشة
                 Container(
                   padding: EdgeInsets.all(16),
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.13),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-                      ),
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.13),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
                     ),
-                    child: Column(
-                      
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(children: [
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
                           Text(
                             "${allClub.length} ",
                             style: TextStyle(fontSize: 18, color: Colors.green),
@@ -146,85 +140,216 @@ class _ClubScreenState extends State<ClubScreen> {
                               //  fontWeight: FontWeight.bold,
                             ),
                           ),
-
-                        ],),
-
-                        SizedBox(height: 16),
-                        Expanded(
-                          child: GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4, // عدد الأعمدة
-                              crossAxisSpacing: 10, // المسافة الأفقية بين العناصر
-                              mainAxisSpacing: 10, // المسافة العمودية بين العناصر
-                              childAspectRatio: 0.8, // النسبة بين العرض والارتفاع
-                            ),
-                            itemCount: allClub.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: (){
-                                  CacheHelper.getData(key: "roles")  == "Admin" ?              showEditClubSheet(context, allClub[index]) :print("Not Admin");
-                                },
-                                child: ClubItem(
-                                  name: allClub[index].name!,
-                                  image: allClub[index].img!,
-                                ),
-                              );
-                            },
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Expanded(
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // عدد الأعمدة
+                            crossAxisSpacing: 10, // المسافة الأفقية بين العناصر
+                            mainAxisSpacing: 10, // المسافة العمودية بين العناصر
+                            childAspectRatio: 0.8, // النسبة بين العرض والارتفاع
                           ),
+                          itemCount: allClub.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {},
+                              child: ClubItem(model: allClub[index]),
+                            );
+                          },
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                 )
               ]);
-            }else return Center(child: CircularProgressIndicator());
-
+            } else
+              return Center(child: CircularProgressIndicator());
           },
         ));
   }
 }
 
-
-
-
 class ClubItem extends StatelessWidget {
-  final String name;
-  final String image;
+  final teamModels? model;
 
-  ClubItem({required this.name, required this.image});
+  ClubItem({super.key, this.model});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.network(
-          fit: BoxFit.fill,
-          image,
-          height: 50,
-          width: 50,
-          errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-            // في حالة حدوث خطأ، هات صورة من assets
-            return Center(child: Image.asset('assets/images/c1.png',height: 50,width: 50,));  // ضع اسم الصورة في assets
-          },
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          // ✅ الصورة تملأ العنصر بالكامل
+          Positioned.fill(
+            child: (model!.img.trim().isNotEmpty)
+                ? Image.network(
+                    model!.img,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => errorImage(),
+                  )
+                : errorImage(),
+          ),
 
+          // ✅ خلفية غامقة للنص
+          Container(
+            width: double.infinity,
+            color: Colors.black.withOpacity(0.4),
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Text(
+              model?.name ?? "",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
+          // ✅ أزرار التعديل والحذف (تظهر فقط لو ممرر callbacks)
+          // ✅ الأزرار تظهر فقط لو المستخدم Admin
+          if (CacheHelper.getData(key: "roles") == "Admin")
+            Positioned(
+                top: 5,
+                left: 5,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showDeleteDialog(context, model!.id);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(
+                            4), // 👈 يقلل المسافة حوالين الأيقونة
+                        constraints: const BoxConstraints(
+                          minWidth: 36,
+                          minHeight: 36,
+                        ), // 👈 يخلي الفريم صغير وثابت
+                        decoration: BoxDecoration(
+                          color: Colors.red
+                              .withOpacity(0.8), // 👈 لون خلفية قوي شوية
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.red.withOpacity(0.3),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                          size: 20, // 👈 أيقونة صغيرة ومتناسبة
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 12),
+
+                    // زر التعديل
+                    GestureDetector(
+                      onTap: () {
+                        showEditClubSheet(context, model!);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(
+                            4), // يقلل المساحة حوالين الأيقونة
+                        constraints: const BoxConstraints(
+                          minWidth: 36,
+                          minHeight: 36,
+                        ), // حجم صغير وثابت
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.withOpacity(0.3),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 20, // صغرنا الأيقونة كمان
+                        ),
+                      ),
+                    )
+
+                    // زر الحذف
+                  ],
+                )),
+        ],
+      ),
+    );
+  }
+
+  Widget errorImage() {
+    return Container(
+      color: const Color(0xff185A3F),
+      child: const Center(
+        child: Icon(
+          Icons.warning_amber_outlined,
+          color: Colors.white,
+          size: 40,
         ),
-        // Container(
-        //   decoration: BoxDecoration(
-        //     shape: BoxShape.circle,
-        //     image: DecorationImage(
-        //       image: AssetImage("assets/images/photo.png"),
-        //       fit: BoxFit.cover,
-        //     ),
-        //   ),
-        //   width: 70,
-        //   height: 70,
-        // ),
-        SizedBox(height: 8),
-        Text(
-          name,
-          style: TextStyle(fontSize: 14, color: Colors.black),
-          textAlign: TextAlign.center,
-        ),
-      ],
+      ),
+    );
+  }
+
+  void showDeleteDialog(BuildContext context, int teamId) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title:
+            Text("delete_activity_title".tr()), // 🔸 ترجمة لعنوان حذف الفاعلية
+        content: Text("delete_activity".tr()), // 🔸 ترجمة نص الحذف
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("cancel".tr()),
+          ),
+          BlocConsumer<HomeCubit, HomeStates>(
+            listener: (context, state) {
+              if (state is DeleteTeamSuccess) {
+                Navigator.pop(context); // إغلاق الـ Dialog
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Gob_done_successfully".tr())),
+                );
+              } else if (state is DeleteTeamFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("error".tr())),
+                );
+              }
+            },
+            builder: (context, state) {
+              if (state is DeleteTeamLoading) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return TextButton(
+                onPressed: () {
+                  context.read<HomeCubit>().deleteClub(id: teamId);
+                },
+                child: Text(
+                  "delete".tr(),
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

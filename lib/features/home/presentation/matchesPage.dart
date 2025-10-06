@@ -142,9 +142,8 @@ class _MatchesScreenState extends State<MatchesScreen> {
 
   Widget buildMatch(MatchModel model) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.2,
-      // padding: EdgeInsets.all(10),
-      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+      height: MediaQuery.of(context).size.height * 0.22,
+      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -152,7 +151,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
             blurRadius: 5,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
         border: Border.all(
@@ -161,143 +160,146 @@ class _MatchesScreenState extends State<MatchesScreen> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(model.firstTeamName,
-                    style: TextStyle(
-                        //  fontWeight: FontWeight.bold
-                        fontSize: 16)),
-                // CircleAvatar(
-                //   backgroundColor: Colors.white,
-                //   radius: 15,
-                //   child: ClipOval(
-                //     child: Image.network(
-                //       matchList[index].firstTeamImage,
-                //       fit: BoxFit.cover, // لجعل الصورة تغطي الدائرة بشكل مناسب
-                //       width: 30, // يجب أن يكون أكبر أو يساوي `2 * radius`
-                //       height: 30, // يجب أن يكون أكبر أو يساوي `2 * radius`
-                //     ),
-                //   ),
-                // ),
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.transparent,
-                  child: ClipOval(
-                    child: model.firstTeamImage.isNotEmpty
-                        ? Image.network(
-                      model.firstTeamImage,
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // لو الرابط فشل، نعرض الصورة من assets
-                        return Image.asset(
-                          "assets/images/c2.png",
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    )
-                        : Image.asset(
-                      "assets/images/c2.png",
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
+            // ✅ الفريق الأول
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    model.firstTeamName,
+                    style: const TextStyle(fontSize: 14),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis, // ✅ نقط عند زيادة الاسم
+                  ),
+                  const SizedBox(height: 6),
+                  CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.transparent,
+                    child: ClipOval(
+                      child: model.firstTeamImage.isNotEmpty
+                          ? Image.network(
+                        model.firstTeamImage,
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            "assets/images/c2.png",
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      )
+                          : Image.asset(
+                        "assets/images/c2.png",
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-
-                SizedBox(height: 8.0),
-                Text(
-                  model.totalFirstTeamGoals.toString(),
-                  style: TextStyle(
-                      // fontWeight: FontWeight.bold)
-                      fontSize: 14),
-                ),
-                Row(
-                  children: [
-                    Text(DateFormat("a h:mm").format(model.appointment),
-                        style: TextStyle(fontSize: 14, color: Colors.grey)),
-                    Icon(
-                      Icons.access_time_outlined,
-                      size: 16,
-                      color: Colors.grey,
-                    )
-                  ],
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(' VS',
-                  style: TextStyle(fontSize: 16, color: Colors.grey)),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  model.secondTeamName,
-                  style: TextStyle(
-                      // fontWeight: FontWeight.bold)
-                      fontSize: 16),
-                ),
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.white,
-                  child: ClipOval(
-                    child: model.secondTeamImage.isNotEmpty
-                        ? Image.network(
-                      model.secondTeamImage,
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        // لو الرابط فشل، نعرض الصورة من assets
-                        return Image.asset(
-                          "assets/images/c2.png",
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    )
-                        : Image.asset(
-                      "assets/images/c2.png",
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
+                  const SizedBox(height: 6),
+                  Text(
+                    model.totalFirstTeamGoals.toString(),
+                    style: const TextStyle(fontSize: 14),
                   ),
-                ),
-
-                SizedBox(height: 8.0),
-                Text(
-                  model.totalSecondTeamGoals.toString(),
-                  style: TextStyle(
-                      // fontWeight: FontWeight.bold)
-                      fontSize: 14),
-                ),
-                SizedBox(height: 8.0),
-                Row(children: [
-                  Text(DateFormat("MMM d").format(model.appointment),
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
-                  Icon(
-                    Icons.calendar_month_outlined,
-                    size: 16,
-                    color: Colors.grey,
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat("a h:mm").format(model.appointment),
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.access_time_outlined,
+                          size: 14, color: Colors.grey),
+                    ],
                   )
-                ]),
-              ],
+                ],
+              ),
+            ),
+
+            // ✅ نص VS في المنتصف
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                'VS',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ),
+
+            // ✅ الفريق الثاني
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    model.secondTeamName,
+                    style: const TextStyle(fontSize: 14),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis, // ✅ نقط عند زيادة الاسم
+                  ),
+                  const SizedBox(height: 6),
+                  CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.transparent,
+                    child: ClipOval(
+                      child: model.secondTeamImage.isNotEmpty
+                          ? Image.network(
+                        model.secondTeamImage,
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            "assets/images/c2.png",
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      )
+                          : Image.asset(
+                        "assets/images/c2.png",
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    model.totalSecondTeamGoals.toString(),
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat("MMM d").format(model.appointment),
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.calendar_month_outlined,
+                          size: 14, color: Colors.grey),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
   }
+
 }

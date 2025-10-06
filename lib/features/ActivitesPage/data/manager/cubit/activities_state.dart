@@ -95,6 +95,24 @@ class DeleteInternalEventFailure extends ActivitiesState {
 
   DeleteInternalEventFailure(this.errorMessage);
 }
+class DeleteEventLoading extends ActivitiesState {}
+
+class DeleteEventSuccess extends ActivitiesState {}
+
+class DeleteEventFailure extends ActivitiesState {
+  final String errorMessage;
+
+  DeleteEventFailure(this.errorMessage);
+}
+class EditEventLoading extends ActivitiesState {}
+
+class EditEventSuccess extends ActivitiesState {}
+
+class EditEventFailure extends ActivitiesState {
+  final String errorMessage;
+
+  EditEventFailure(this.errorMessage);
+}
 class GetEventsLoading extends ActivitiesState {}
 
 class GetEventsSuccess extends ActivitiesState {

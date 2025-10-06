@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lacrosse/features/ActivitesPage/data/manager/cubit/activities_cubit.dart';
@@ -45,9 +46,27 @@ void showEditClubSheet(BuildContext context, teamModels club) {
                   // الصورة الدائرية للفريق
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage(club.img!),
                     backgroundColor: Colors.grey[200],
+                    child: ClipOval(
+                      child: Image.network(
+                        club.img ?? "", // الرابط أو نص فاضي
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: const Color(0xff185A3F),
+                          child: const Center(
+                            child: Icon(
+                              Icons.warning_amber_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
+
                   SizedBox(height: 20),
 
                   // حقل تعديل الاسم
@@ -75,14 +94,14 @@ void showEditClubSheet(BuildContext context, teamModels club) {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[800],
+                      backgroundColor:Color(0xff185A3F),
                       minimumSize: Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: Text(
-                      "Save",
+                      "Save".tr(),
                       style: TextStyle(
                           fontSize: 16, color: Colors.white),
                     ),

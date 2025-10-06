@@ -20,7 +20,7 @@ import '../../eventsPage/presentation/schedule_AnAudience_Experience.dart';
 import '../../orders/presentation/orders_page.dart';
 import '../../home/presentation/HomePage.dart';
 
-import '../widjet/bottom_sheet_main.dart';
+import '../widgets/bottom_sheet_main.dart';
 
 class Basescreen extends StatefulWidget {
   @override
@@ -152,7 +152,7 @@ class _BasescreenState extends State<Basescreen> {
     );
   }
 
-  void showCustomBottomSheet(BuildContext context) {
+   showCustomBottomSheet(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true, // ✅ يتيح التحكم في الارتفاع
       context: context,
