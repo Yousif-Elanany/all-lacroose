@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "966185766887",
+    "firebase_url": "https://lacrosse-app-ec697-default-rtdb.firebaseio.com",
+    "project_id": "lacrosse-app-ec697",
+    "storage_bucket": "lacrosse-app-ec697.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966185766887:android:ccc1e74b693bf31d94f742",
+        "android_client_info": {
+          "package_name": "com.example.lacrosse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9P2V8E6MxKgzACah38sJSBpugVhDp1b0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
