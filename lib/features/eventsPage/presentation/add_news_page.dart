@@ -37,6 +37,7 @@ class _Add_news_pageState extends State<Add_news_page> {
   String mainImageLink = "";
   List<NewsDetailModel> listDetails = [];
 
+  bool loading = false; // القيمة المختارة
 
   File? selectedImage1;
   File? selectedImage2;
@@ -66,6 +67,15 @@ class _Add_news_pageState extends State<Add_news_page> {
               behavior: SnackBarBehavior.floating,
             ),
           );
+        }
+        if (state is AddNewsEventLoading) {
+          setState(() {
+            loading = true;
+          });
+        }else{
+          setState(() {
+            loading = false;
+          });
         }
 
 
@@ -377,7 +387,7 @@ class _Add_news_pageState extends State<Add_news_page> {
                                       }
                                     },
 
-                                    child: Button_default(
+                                    child: loading? Center(child: CircularProgressIndicator(color: Colors.green,)) : Button_default(
                                       height: 48,
                                       title: "adding_news".tr(),
                                       color: Color(0xff207954),

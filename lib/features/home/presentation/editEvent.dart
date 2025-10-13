@@ -195,6 +195,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
       toDay: toDay,
       fromTime: fromTimeStr,
       toTime: toTimeStr,
+      image: pickedImage,
     );
   }
 

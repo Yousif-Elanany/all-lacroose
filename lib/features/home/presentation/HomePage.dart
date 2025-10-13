@@ -20,7 +20,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../data/Local/sharedPref/sharedPref.dart';
 
-import '../../../test3.dart';
 
 import '../../ActivitesPage/data/models/activityModel.dart';
 import '../../notficationPage/presentation/notification_page_manager.dart';
@@ -503,37 +502,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 )
                               ],
-
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 10),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Matches'.tr(),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    GestureDetector(
+                                      onTap: () {
+                                        navigateTo(context, MatchesScreen());
+                                      },
+                                      child: Text(
+                                        'show_All'.tr(),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xff207954)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               // المباريات
                               if (matchList.isNotEmpty) ...[
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 10),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Matches'.tr(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      GestureDetector(
-                                        onTap: () {
-                                          navigateTo(context, MatchesScreen());
-                                        },
-                                        child: Text(
-                                          'show_All'.tr(),
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xff207954)),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+
                                 SizedBox(
                                   height: MediaQuery.of(context).size.height * 0.14,
                                   child: ListView.builder(

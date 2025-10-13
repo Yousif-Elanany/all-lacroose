@@ -72,6 +72,12 @@ class _EditPlayerScreenState extends State<EditPlayerScreen> {
           SnackBar(content: Text(state.errorMessage)),
         );
       }
+      if (state is UpdatePlayerSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Data updated successfully".tr())),
+        );
+        // يمكنك إضافة أي إجراءات تحميل هنا إذا لزم الأمر
+      }
 
       if (state is EditPlayerLoaded) {
         setState(() {
@@ -90,6 +96,7 @@ class _EditPlayerScreenState extends State<EditPlayerScreen> {
           if (state is getPlayerDataFailure) {
             return Center(child: Text(state.errorMessage));
           }
+
 
           if (state is EditPlayerLoaded) {
             final player = state.player;
@@ -215,29 +222,40 @@ class _EditPlayerScreenState extends State<EditPlayerScreen> {
                   SizedBox(height: 20),
 
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff185A3F), // 💚 لون أخضر غامق
+                      foregroundColor: Colors.white, // لون النص
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // زوايا دائرية
+                      ),
+                      elevation: 3, // ظل خفيف
+                    ),
                     onPressed: () {
                       final cubit = context.read<HomeCubit>();
 
                       cubit.updatePlayerData(
-                        id: player.id, // لازم دايمًا
-
-                        // هنستخدم اللي جوّه الـ controllers على طول
+                        id: player.id,
                         displayName: nameController.text,
-                        birthDate: birthDateController.text, // لو عملتله controller يبقى نفس الفكرة
+                        birthDate: birthDateController.text,
                         city: cityController.text,
                         area: areaController.text,
                         address: addressController.text,
-
                         teamId: selectedTeamId ?? player.teamId,
                         nationalityId: selectedNationalityId ?? player.nationalityId,
-
-                        imageFile: _pickedImage, // لو اختار صورة هتتبعت، لو لأ هتتبعت null
+                        imageFile: _pickedImage,
                       );
                       Navigator.pop(context);
-
                     },
-                    child: Text("Save Edit".tr()),
-                  ),
+                    child: Text(
+                      "Save Edit".tr(),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+
                 ],
               ),
             );

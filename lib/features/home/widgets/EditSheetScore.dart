@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lacrosse/features/home/data/manager/cubit/home_cubit.dart';
@@ -24,14 +25,39 @@ void showScoreInputSheet(
         listener: (context, state) {
           if (state is EditMatchSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("تم تحديث الأهداف بنجاح")),
+              SnackBar(
+                content: Text(
+                  "Gob_done_successfully".tr(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.green.shade600, // ✅ أخضر للنجاح
+                behavior: SnackBarBehavior.floating,
+                margin: const EdgeInsets.all(10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                duration: const Duration(seconds: 2),
+              ),
             );
-            Navigator.pop(context); // اغلاق الشيت بعد النجاح
+            Navigator.pop(context); // إغلاق الشيت بعد النجاح
           } else if (state is EditMatchFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
+              SnackBar(
+                content: Text(
+                  state.errorMessage,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red.shade600, // ❌ أحمر للفشل
+                behavior: SnackBarBehavior.floating,
+                margin: const EdgeInsets.all(10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                duration: const Duration(seconds: 2),
+              ),
             );
           }
+
         },
         builder: (context, state) {
           final isLoading = state is EditMatchLoading;
@@ -39,7 +65,7 @@ void showScoreInputSheet(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                " تعديل الأهداف",
+                "EditScores".tr(),
                 style: TextStyle(
                   fontSize: 18, fontWeight: FontWeight.bold,
                   color: Color(0xff185A3F), // اللون الأخضر
@@ -92,7 +118,7 @@ void showScoreInputSheet(
                           );
                         },
                         child: Text(
-                          "تأكيد",
+                          "confirm".tr(),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),

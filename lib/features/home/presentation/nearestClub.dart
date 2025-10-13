@@ -10,133 +10,157 @@ import '../data/manager/cubit/home_cubit.dart';
 import '../data/models/markerModel.dart';
 
 class NearestClub extends StatefulWidget {
-  NearestClub();
+  const NearestClub({super.key});
 
   @override
   State<NearestClub> createState() => _NearestClubState();
 }
 
 class _NearestClubState extends State<NearestClub> {
-  late GoogleMapController _mapController;
-  late Position _currentPosition;
-  late CameraPosition _cameraPosition;
-  Set<Marker> _markers = Set();
-  final LatLng carPosition = LatLng(30.0444, 31.2357);
+  GoogleMapController? _mapController;
+  Set<Marker> _markers = {};
+  Set<Polyline> _polylines = {};
+  late PolylinePoints polylinePoints;
+  LatLng? _nearestLocation;
+  LatLng? _currentPosition;
+  final String googleApiKey = "AIzaSyC0hAS3zDVm4czww_CNmgFUqlvaYVXwsZU";
 
   @override
   void initState() {
     super.initState();
+    polylinePoints = PolylinePoints();
     _getCurrentLocation();
   }
 
-  void _getCurrentLocation() async {
+  /// 🧭 دالة الحصول على الموقع الحالي الحقيقي
+  Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // التحقق من تفعيل الخدمة
+    // التأكد أن خدمة الموقع مفعّلة
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // عرض رسالة في حالة عدم تفعيل الخدمة
+      print("⚠️ خدمة الموقع غير مفعلة");
       return;
     }
 
-    // التحقق من إذن الوصول إلى الموقع
+    // التحقق من الأذونات
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
+      if (permission == LocationPermission.denied) {
+        print("⚠️ تم رفض إذن الموقع");
         return;
       }
     }
 
+    if (permission == LocationPermission.deniedForever) {
+      print("⚠️ تم رفض إذن الموقع بشكل دائم");
+      return;
+    }
+
     // الحصول على الموقع الحالي
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    if (!mounted) return;
 
     setState(() {
-      _currentPosition = position;
-      _cameraPosition = CameraPosition(
-        target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
-        zoom: 16.0,
+      _currentPosition = LatLng(position.latitude, position.longitude);
+      _markers.add(
+        Marker(
+          markerId: const MarkerId('current_location'),
+          position: _currentPosition!,
+          infoWindow: const InfoWindow(title: 'موقعك الحالي'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        ),
       );
-      _markers.clear(); // إزالة الماركر القديم
-      _markers.add(Marker(
-        markerId: MarkerId('club'),
-        position: carPosition,
-        infoWindow: InfoWindow(title: 'موقعك الحالى '),
-      ));
     });
 
-    // تحديث الموقع كل 5 ثواني
-    Geolocator.getPositionStream(desiredAccuracy: LocationAccuracy.high)
-        .listen((Position position) {
-      setState(() {
-        _currentPosition = position;
-        _cameraPosition = CameraPosition(
-          target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
-          zoom: 16.0,
+    // استدعاء أقرب الملاعب بناءً على الموقع الحقيقي
+    context.read<HomeCubit>().getNearestPlaygrounds(
+          lat: position.latitude,
+          long: position.longitude,
         );
-        _markers.clear(); // إزالة الماركر القديم
-        _markers.add(Marker(
-          markerId: MarkerId('club'),
-          position: LatLng(_currentPosition.latitude, _currentPosition.longitude),
-          infoWindow: InfoWindow(title: 'موقع الحالى'),
-        ));
-      });
-      _mapController.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-    });
   }
 
-  // Future<void> checkNearestLocation(List<MarkerModel> markersList) async {
-  //   if (_currentPosition == null || markersList.isEmpty) return;
-  //
-  //   markersList.sort((a, b) => a.distance.compareTo(b.distance));
-  //   final nearest = markersList.first;
-  //
-  //   setState(() {
-  //     _nearestLocation = LatLng(nearest.latitude, nearest.longitude);
-  //   });
-  // }
+  Future<void> checkNearestLocation(
+      List<LocationMarkerModel> markersList) async {
+    if (markersList.isEmpty || _currentPosition == null) return;
 
-  // Future<void> _drawRoute() async {
-  //   if (_currentPosition == null || _nearestLocation == null) return;
-  //
-  //   String url =
-  //       "https://maps.googleapis.com/maps/api/directions/json?origin=${_currentPosition.latitude},${_currentPosition.longitude}&destination=${_nearestLocation!.latitude},${_nearestLocation!.longitude}&key=$googleApiKey";
-  //
-  //   try {
-  //     Dio dio = Dio();
-  //     Response response = await dio.get(url);
-  //
-  //     if (response.statusCode == 200) {
-  //       var data = response.data;
-  //       if (data["status"] == "OK") {
-  //         List<PointLatLng> points =
-  //         polylinePoints.decodePolyline(data["routes"][0]["overview_polyline"]["points"]);
-  //
-  //         List<LatLng> polylineCoordinates =
-  //         points.map((point) => LatLng(point.latitude, point.longitude)).toList();
-  //
-  //         setState(() {
-  //           _polylines.clear();
-  //           _polylines.add(Polyline(
-  //             polylineId: PolylineId("route"),
-  //             color: Colors.blue,
-  //             width: 5,
-  //             points: polylineCoordinates,
-  //           ));
-  //         });
-  //       } else {
-  //         print("⚠️ Google Maps API Error: ${data["status"]}");
-  //       }
-  //     } else {
-  //       print("⚠️ HTTP Error: ${response.statusCode}");
-  //     }
-  //   } catch (e) {
-  //     print("❌ Error fetching directions: $e");
-  //   }
-  // }
+    markersList.sort((a, b) => a.distance.compareTo(b.distance));
+    final nearest = markersList.first;
+
+    setState(() {
+      _nearestLocation = LatLng(nearest.latitude, nearest.longitude);
+    });
+
+    await _drawRoute();
+  }
+
+  Future<void> _drawRoute() async {
+    if (_nearestLocation == null || _currentPosition == null) return;
+
+    final origin =
+        "${_currentPosition!.latitude},${_currentPosition!.longitude}";
+    final destination =
+        "${_nearestLocation!.latitude},${_nearestLocation!.longitude}";
+
+    String url =
+        "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$googleApiKey";
+
+    try {
+      Dio dio = Dio();
+      Response response = await dio.get(url);
+
+      if (response.statusCode == 200 && response.data["status"] == "OK") {
+        List<PointLatLng> result = polylinePoints.decodePolyline(
+            response.data["routes"][0]["overview_polyline"]["points"]);
+
+        List<LatLng> routeCoords =
+            result.map((p) => LatLng(p.latitude, p.longitude)).toList();
+
+        if (!mounted) return;
+
+        setState(() {
+          _polylines.clear();
+          _polylines.add(Polyline(
+            polylineId: const PolylineId("route"),
+            color: Colors.blue,
+            width: 5,
+            points: routeCoords,
+          ));
+        });
+
+        // نحرك الكاميرا للموقع الحالي
+        _mapController?.animateCamera(
+          CameraUpdate.newLatLngBounds(
+            _createBounds(_currentPosition!, _nearestLocation!),
+            60,
+          ),
+        );
+      } else {
+        print("⚠️ خطأ من Google Directions API: ${response.data["status"]}");
+      }
+    } catch (e) {
+      print("❌ خطأ أثناء جلب الاتجاهات: $e");
+    }
+  }
+
+  /// لإنشاء حدود بين نقطتين لتكبير الخريطة بشكل مناسب
+  LatLngBounds _createBounds(LatLng start, LatLng end) {
+    return LatLngBounds(
+      southwest: LatLng(
+        start.latitude < end.latitude ? start.latitude : end.latitude,
+        start.longitude < end.longitude ? start.longitude : end.longitude,
+      ),
+      northeast: LatLng(
+        start.latitude > end.latitude ? start.latitude : end.latitude,
+        start.longitude > end.longitude ? start.longitude : end.longitude,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,24 +168,26 @@ class _NearestClubState extends State<NearestClub> {
       body: BlocConsumer<HomeCubit, HomeStates>(
         listener: (context, state) async {
           if (state is NearestPlaygroundsDataSuccess) {
-            // if (state.markersList.isNotEmpty) {
-            //   setState(() {
-            //     _markers.addAll(
-            //       state.markersList.map((location) => Marker(
-            //         markerId: MarkerId(location.id.toString()),
-            //         position: LatLng(location.latitude, location.longitude),
-            //         infoWindow: InfoWindow(
-            //           title: location.name,
-            //           snippet: "المسافة: ${location.distance.toStringAsFixed(2)} كم",
-            //         ),
-            //         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-            //       )),
-            //     );
-            //   });
-            //
-            //   // await checkNearestLocation(state.markersList);
-            //   // await _drawRoute();
-            // }
+            if (state.markersList.isNotEmpty && _currentPosition != null) {
+              if (!mounted) return;
+              setState(() {
+                _markers.addAll(
+                  state.markersList.map((location) => Marker(
+                        markerId: MarkerId(location.id.toString()),
+                        position: LatLng(location.latitude, location.longitude),
+                        infoWindow: InfoWindow(
+                          title: location.name,
+                          snippet:
+                              "المسافة: ${location.distance.toStringAsFixed(2)} كم",
+                        ),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRed),
+                      )),
+                );
+              });
+
+              await checkNearestLocation(state.markersList);
+            }
           }
         },
         builder: (context, state) {
@@ -170,13 +196,10 @@ class _NearestClubState extends State<NearestClub> {
               Column(
                 children: [
                   SizedBox(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.14,
+                    height: MediaQuery.of(context).size.height * 0.14,
                     child: Container(
                       decoration: BoxDecoration(
-                        image: DecorationImage(
+                        image: const DecorationImage(
                           image: AssetImage("assets/images/top bar.png"),
                           fit: BoxFit.cover,
                         ),
@@ -208,16 +231,17 @@ class _NearestClubState extends State<NearestClub> {
                         width: 40,
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.6),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
                         ),
-                        child: Icon(Icons.arrow_back_ios_outlined,
+                        child: const Icon(Icons.arrow_back_ios_outlined,
                             color: Color(0xff185A3F), size: 20),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(
                       'nearest_club'.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xff185A3F),
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
@@ -226,28 +250,31 @@ class _NearestClubState extends State<NearestClub> {
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.14),
-                child: GoogleMap(
-                  mapType: MapType.normal, // نوع الخريطة هنا
-                  initialCameraPosition: CameraPosition(
-                    target: carPosition, // إحداثيات القاهرة
-                    zoom: 16.0,
+              if (_currentPosition != null)
+                Container(
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.14),
+                  child: GoogleMap(
+                    mapType: MapType.normal,
+                    initialCameraPosition: CameraPosition(
+                      target: _currentPosition!,
+                      zoom: 14,
+                    ),
+                    markers: _markers,
+                    polylines: _polylines,
+                    onMapCreated: (controller) {
+                      _mapController = controller;
+                    },
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
                   ),
-                  markers: _markers, // إضافة الماركر هنا
-                  onMapCreated: (GoogleMapController controller) {
-                    _mapController = controller;
-                  },
-                ),
-
-              ),
+                )
+              else
+                const Center(child: CircularProgressIndicator()),
             ],
           );
         },
       ),
     );
-  }}
+  }
+}

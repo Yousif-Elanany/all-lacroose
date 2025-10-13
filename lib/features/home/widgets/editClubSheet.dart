@@ -5,6 +5,8 @@ import 'package:lacrosse/features/ActivitesPage/data/manager/cubit/activities_cu
 import 'package:lacrosse/features/home/data/manager/cubit/home_cubit.dart';
 import 'package:lacrosse/features/home/data/models/model_team.dart';
 
+import '../../../core/component/snackBar.dart';
+
 void showEditClubSheet(BuildContext context, teamModels club) {
   final _nameController = TextEditingController(text: club.name);
 
@@ -17,13 +19,11 @@ void showEditClubSheet(BuildContext context, teamModels club) {
         listener: (context, state) {
           if (state is EdiTeamSuccess) {
             Navigator.pop(context); // إغلاق الشيت بعد النجاح
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Club name updated successfully")),
-            );
+            showSuccessSnackBar(context,
+                "Gob_done_successfully".tr()); // إغلاق الشيت بعد النجاح
           } else if (state is EditTeamFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
-            );
+            Navigator.pop(context);
+            showErrorSnackBar(context, "errorUpdateClub".tr());
           }
         },
         builder: (context, state) {
@@ -73,7 +73,7 @@ void showEditClubSheet(BuildContext context, teamModels club) {
                   TextField(
                     controller: _nameController,
                     decoration: InputDecoration(
-                      labelText: "Club Name",
+                      labelText: "Club Name".tr(),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -85,27 +85,25 @@ void showEditClubSheet(BuildContext context, teamModels club) {
                   state is EditTeamLoading
                       ? CircularProgressIndicator()
                       : ElevatedButton(
-                    onPressed: () {
-                      // استدعاء Cubit لتعديل اسم النادي
-                      context.read<HomeCubit>().editClub(
-                        id:  club.id!,
-                       name:
-                        _nameController.text,
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:Color(0xff185A3F),
-                      minimumSize: Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      "Save".tr(),
-                      style: TextStyle(
-                          fontSize: 16, color: Colors.white),
-                    ),
-                  ),
+                          onPressed: () {
+                            // استدعاء Cubit لتعديل اسم النادي
+                            context.read<HomeCubit>().editClub(
+                                  id: club.id!,
+                                  name: _nameController.text,
+                                );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xff185A3F),
+                            minimumSize: Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            "Save Edit".tr(),
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
                   SizedBox(height: 20),
                 ],
               ),

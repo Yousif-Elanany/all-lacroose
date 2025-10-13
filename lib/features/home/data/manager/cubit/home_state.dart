@@ -276,6 +276,18 @@ class EditMatchFailure extends HomeStates {
   final String errorMessage;
   EditMatchFailure(this.errorMessage);
 }
+  class DeleteMatchLoading extends HomeStates {}
+
+  // Success
+  class DeleteMatchSuccess extends HomeStates {
+
+  }
+
+  // Failure
+  class DeleteMatchFailure extends HomeStates {
+    final String errorMessage;
+    DeleteMatchFailure(this.errorMessage);
+  }
 
 class EditTeamLoading extends HomeStates {}
 

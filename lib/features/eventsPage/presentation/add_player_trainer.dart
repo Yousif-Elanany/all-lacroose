@@ -378,12 +378,21 @@ class _Add_player_trainerState extends State<Add_player_trainer> {
                                   type: TextInputType.text,
                                   controller: nameController,
                                   validate: (value) {
-                                    if (value!.isEmpty) {
+                                    if (value == null || value.isEmpty) {
                                       return 'Required'.tr();
                                     }
+
+                                    // ✅ التحقق إن الاسم يحتوي فقط على حروف وأرقام بدون مسافات
+                                    final regex = RegExp(r'^[a-zA-Z0-9\u0621-\u064A]+$');
+                                    if (!regex.hasMatch(value)) {
+                                      return 'Only letters and numbers are allowed (no spaces)'.tr();
+                                    }
+
                                     return null;
                                   },
                                 ),
+
+
                                 SizedBox(
                                   height: 20,
                                 ),

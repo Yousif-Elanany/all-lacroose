@@ -295,6 +295,7 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
     String? toDay,
     String? fromTime,
     String? toTime,
+    File? image,
   }) async {
     emit(EditEventLoading());
 
@@ -310,7 +311,11 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
         'FromDay': fromDay ?? "",
         'ToDay': toDay ?? "",
         'FromTime': fromTime ?? "",
-        'ToTime': toTime ?? ""
+        'ToTime': toTime ?? "",
+        if (image != null)
+          'file': await MultipartFile.fromFile(image.path,
+              filename: image.path.split('/').last),
+
       });
       // إضافة الصورة لو موجودة
 

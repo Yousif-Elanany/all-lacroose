@@ -29,6 +29,7 @@ class _Add_club_pageState extends State<Add_club_page> {
   File? _selectedImage; // لتخزين الصورة المختارة
   File? selectedImage1;
   final ImagePicker _picker = ImagePicker();
+  bool loading = false;
   Future<void> _pickImage(ImageSource source) async {
     try {
       // اختيار الصورة
@@ -88,6 +89,20 @@ class _Add_club_pageState extends State<Add_club_page> {
           listener: (BuildContext context, ManagerStates state) {
             if (state is addClubSuccess) {
               _showAwesomeDialog(context);
+            }
+            if (state is addClubFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.errorMessage)),
+              );
+              if (state is addClubLoading) {
+                setState(() {
+                  loading = true;
+                });
+              } else {
+                setState(() {
+                  loading = false;
+                });
+              }
             }
           },
           builder: (BuildContext context, ManagerStates state) {
@@ -224,8 +239,12 @@ class _Add_club_pageState extends State<Add_club_page> {
                                               if (formKey.currentState!
                                                   .validate()) {
                                                 if (_selectedImage == null) {
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    SnackBar(content: Text("please_select_image".tr())),
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                        content: Text(
+                                                            "please_select_image"
+                                                                .tr())),
                                                   );
                                                   return;
                                                 }
@@ -243,11 +262,16 @@ class _Add_club_pageState extends State<Add_club_page> {
                                               _selectedImage = null;
                                               setState(() {});
                                             },
-                                      child: Button_default(
-                                        height: 48,
-                                        title: "adding_club".tr(),
-                                        color: Color(0xff207954),
-                                      )),
+                                      child: loading
+                                          ? Center(
+                                              child: CircularProgressIndicator(
+                                              color: Colors.green,
+                                            ))
+                                          : Button_default(
+                                              height: 48,
+                                              title: "adding_club".tr(),
+                                              color: Color(0xff207954),
+                                            )),
                                   SizedBox(
                                     height: 30,
                                   ),

@@ -24,7 +24,7 @@ class Schedule_AnAudience_Experience extends StatefulWidget {
 class _Schedule_AnAudience_ExperienceState
     extends State<Schedule_AnAudience_Experience> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+bool loading = false;
   var _eventTime = TextEditingController();
   var _eventdate = TextEditingController();
   var _eventLocatioin = TextEditingController();
@@ -47,6 +47,17 @@ class _Schedule_AnAudience_ExperienceState
     return BlocConsumer<managerCubit, ManagerStates>(
       listener: (context, state) {
         if (state is CreateExperienceSuccess) _showAwesomeDialog(context);
+
+        if (state is CreateExperienceLoading){
+          setState(() {
+            loading = true;
+          });
+        } else {
+          setState(() {
+            loading = false;
+          });
+        }
+
       },
       builder: (context, state) {
         return Scaffold(
@@ -203,7 +214,7 @@ class _Schedule_AnAudience_ExperienceState
                                               _eventLocatioin.clear();
                                             }
                                           },
-                                    child: Button_default(
+                                    child: loading ? Center(child: CircularProgressIndicator()) :Button_default(
                                       height: 56,
                                       title: "add_this_time".tr(),
                                       color: Color(0xff207954),

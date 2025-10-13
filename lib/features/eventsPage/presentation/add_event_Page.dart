@@ -44,6 +44,7 @@ class _Add_eventState extends State<Add_event> {
   final CustomDropdownController_teams dropdownControllerTeams =
       CustomDropdownController_teams();
   int selectedIndex = 0; // 0 = match, 1 = training, 2 = other
+  bool loading = false; // القيمة المختارة
 
   GlobalKey dropdownKey2 = GlobalKey();
   var _eventName = TextEditingController();
@@ -147,7 +148,15 @@ class _Add_eventState extends State<Add_event> {
             ),
           );
         }
-
+        if (state is AddEventLoading || state is AddNewEventLoading) {
+          setState(() {
+            loading = true;
+          });
+        } else {
+          setState(() {
+            loading = false;
+          });
+        }
       },
       builder: (context, state) {
         return Scaffold(
@@ -953,7 +962,11 @@ class _Add_eventState extends State<Add_event> {
                                                           context)
                                                       .addEvent(
                                                           Name: _eventName.text,
-                                                      file: list_selected_mediaFile.isNotEmpty ? list_selected_mediaFile[0] : null,
+                                                          file: list_selected_mediaFile
+                                                                  .isNotEmpty
+                                                              ? list_selected_mediaFile[
+                                                                  0]
+                                                              : null,
                                                           Description:
                                                               _eventDescription
                                                                   .text,
@@ -1017,11 +1030,13 @@ class _Add_eventState extends State<Add_event> {
                                                 });
                                               }
                                             },
-                                      child: Button_default(
-                                        height: 56,
-                                        title: "add_this_event".tr(),
-                                        color: Color(0xff207954),
-                                      ),
+                                      child: loading
+                                          ? Center(child: CircularProgressIndicator(color: Colors.green,))
+                                          : Button_default(
+                                              height: 56,
+                                              title: "add_this_event".tr(),
+                                              color: Color(0xff207954),
+                                            ),
                                     ),
                                     // SizedBox(
                                     //   height: 20,

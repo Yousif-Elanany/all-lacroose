@@ -49,6 +49,7 @@ class _Add_player_trainer2State extends State<Add_player_trainer2> {
 
   bool selected_register = true; // القيمة المختارة
   String selectedValue = 'Option 1';
+  bool loading = false; // القيمة المختارة
 
   var emailController = TextEditingController();
   var passController = TextEditingController();
@@ -65,6 +66,19 @@ class _Add_player_trainer2State extends State<Add_player_trainer2> {
             }
             if (state is addUserFailure) {
               _showDialog(context, state.errorMessage);
+            }
+            if (state is addUserLoading) {
+              // Show loading indicator or perform any action during loading
+              // For example, you can set a loading state variable to true
+              setState(() {
+                loading = true;
+              });
+            } else {
+              // Hide loading indicator or perform any action after loading
+              // For example, you can set a loading state variable to false
+              setState(() {
+                loading = false;
+              });
             }
           },
           builder: (context, state) {
@@ -267,11 +281,15 @@ class _Add_player_trainer2State extends State<Add_player_trainer2> {
                                                     widget.userNationalityId,
                                                 file: widget.userImage);
                                       }
+                                      else{
+                                        _showDialog(context,
+                                            "password_not_same".tr());
+                                      }
                                       // print();
                                       //   widge
                                     }
                                   },
-                            child: Button_default(
+                            child:loading?Center(child: CircularProgressIndicator(color: Colors.green,)):  Button_default(
                               height: 56,
                               title: widget.userType == 0
                                   ? "reg_player".tr()

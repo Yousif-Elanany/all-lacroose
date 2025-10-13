@@ -579,6 +579,38 @@ class HomeCubit extends Cubit<HomeStates> {
     }
   }
 
+  Future<void> deleteMatch({
+    int? id,
+  }) async {
+    emit(DeleteMatchLoading());
+
+    try {
+      final response = await dioService.deleteWithToken(
+        "api/Match/$id",
+      );
+
+      // التحقق من status code
+      if (response.statusCode == 200) {
+        // هنا ممكن تعالج البيانات لو حابب
+        print("تم تحديث المباراة بنجاح: ${response.data}");
+        emit(DeleteMatchSuccess());
+        fetchAllmatches(); // تحديث قائمة المباريات بعد التعديل
+      } else if (response.statusCode == 400) {
+        print("حدث خطأ في الطلب: ${response.data}");
+        emit(DeleteMatchFailure("حدث خطأ: ${response.data}"));
+      } else {
+        // أي كود حالة آخر
+        emit(DeleteMatchFailure("حدث خطأ غير متوقع: ${response.statusCode}"));
+      }
+    } on DioException catch (e) {
+      print("خطأ أثناء الاتصال بالـ API: ${e.response?.data}");
+      emit(DeleteMatchFailure(
+          "خطأ أثناء الاتصال بالـ API: ${e.response?.data ?? e.message}"));
+    } catch (e) {
+      emit(DeleteMatchFailure("خطأ غير متوقع: $e"));
+    }
+  }
+
   Future<void> editClub({
     int? id,
     String? name,

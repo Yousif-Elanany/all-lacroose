@@ -8,6 +8,7 @@ import 'package:lacrosse/features/home/data/manager/cubit/home_cubit.dart';
 import 'package:lacrosse/features/home/data/models/PlayerModel.dart';
 import 'package:lacrosse/features/home/widgets/editClubSheet.dart';
 
+import '../../../core/component/snackBar.dart';
 import '../data/models/model_team.dart';
 import '../widgets/customPlayerWidget.dart';
 
@@ -215,8 +216,8 @@ class ClubItem extends StatelessWidget {
           // ✅ الأزرار تظهر فقط لو المستخدم Admin
           if (CacheHelper.getData(key: "roles") == "Admin")
             Positioned(
-                top: 5,
-                left: 5,
+                top: 10,
+                left: 10,
                 child: Row(
                   children: [
                     GestureDetector(
@@ -308,9 +309,8 @@ class ClubItem extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title:
-            Text("delete_activity_title".tr()), // 🔸 ترجمة لعنوان حذف الفاعلية
-        content: Text("delete_activity".tr()), // 🔸 ترجمة نص الحذف
+        title: Text("delete_team_title".tr()), // 🔸 ترجمة لعنوان حذف الفاعلية
+        content: Text("delete_team".tr()), // 🔸 ترجمة نص الحذف
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -319,15 +319,13 @@ class ClubItem extends StatelessWidget {
           BlocConsumer<HomeCubit, HomeStates>(
             listener: (context, state) {
               if (state is DeleteTeamSuccess) {
-                Navigator.pop(context); // إغلاق الـ Dialog
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Gob_done_successfully".tr())),
-                );
+                Navigator.pop(context); // ✅ إغلاق الـ Dialog
+                showSuccessSnackBar(context, "Gob_done_successfully".tr());
               } else if (state is DeleteTeamFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("error".tr())),
-                );
+                Navigator.pop(context); // ✅ إغلاق الـ Dialog
+                showErrorSnackBar(context, "errorDeleteToClub".tr());
               }
+
             },
             builder: (context, state) {
               if (state is DeleteTeamLoading) {

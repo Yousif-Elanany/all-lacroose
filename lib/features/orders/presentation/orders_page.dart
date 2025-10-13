@@ -6,6 +6,7 @@ import 'package:lacrosse/features/auth/data/manager/cubit/auth_states.dart';
 
 import '../../../data/Local/sharedPref/sharedPref.dart';
 import '../../home/presentation/player_page.dart';
+import '../../home/presentation/trainersPage.dart';
 import '../../layout/Tabs/BaseScreen.dart';
 import '../../eventsPage/widgets/button_default.dart';
 import '../../eventsPage/widgets/custom_drop_down.dart';
@@ -100,7 +101,11 @@ class _Order_pageState extends State<Order_page> {
                             Spacer(),
 
                             GestureDetector(
-                              onTap: (){navigateTo(context, PlayersScreen());},
+                              onTap: () {
+                                is_players_order
+                                    ? navigateTo(context, PlayersScreen())
+                                    : navigateTo(context, TrainersScreen());
+                              },
                               child: Text(
                                 is_players_order == true
                                     ? "show_players".tr()
@@ -152,29 +157,37 @@ class _Order_pageState extends State<Order_page> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded( // 👈 يجعل الزر الأول يأخذ نصف المساحة المتاحة
+                          Expanded(
+                            // 👈 يجعل الزر الأول يأخذ نصف المساحة المتاحة
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
                                   is_players_order = true;
                                   is_trainer_order = false;
                                 });
-                                context.read<OrderCubit>().fetchOrders(userType: 0);
+                                context
+                                    .read<OrderCubit>()
+                                    .fetchOrders(userType: 0);
                               },
-                              child: _select_Button("players_join_order".tr(), is_players_order),
+                              child: _select_Button(
+                                  "players_join_order".tr(), is_players_order),
                             ),
                           ),
                           SizedBox(width: 5),
-                          Expanded( // 👈 يجعل الزر الثاني يأخذ نصف المساحة المتاحة
+                          Expanded(
+                            // 👈 يجعل الزر الثاني يأخذ نصف المساحة المتاحة
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
                                   is_players_order = false;
                                   is_trainer_order = true;
                                 });
-                                context.read<OrderCubit>().fetchOrders(userType: 1);
+                                context
+                                    .read<OrderCubit>()
+                                    .fetchOrders(userType: 1);
                               },
-                              child: _select_Button("trainers_join_order".tr(), is_trainer_order),
+                              child: _select_Button(
+                                  "trainers_join_order".tr(), is_trainer_order),
                             ),
                           ),
                         ],
@@ -218,7 +231,7 @@ class _Order_pageState extends State<Order_page> {
                           child: Center(
                             child: Text(
                               "no_player_orders".tr(), // مفتاح الترجمة
-                               style: TextStyle(
+                              style: TextStyle(
                                 color: Color(0xff999999), //
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -243,7 +256,7 @@ class _Order_pageState extends State<Order_page> {
                         ),
                       Expanded(
                           child: ListView.builder(
-                            shrinkWrap: true,
+                              shrinkWrap: true,
                               padding: EdgeInsets.zero,
                               itemCount: is_players_order
                                   ? plyersOrderlist.length

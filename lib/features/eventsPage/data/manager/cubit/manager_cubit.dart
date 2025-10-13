@@ -736,6 +736,7 @@ class managerCubit extends Cubit<ManagerStates> {
       // data.map((json) => ReservationModel.fromJson(json)).toList();
       print(response.data);
       emit(UpdateExperienceSuccess());
+      getExperiences(date: DateTime.now().toString().split(" ").first);
       print("DeleteExperienceSuccessful: ${response.data}");
     } on DioException catch (e) {
       print("/////DeleteExperience////////////////////////");

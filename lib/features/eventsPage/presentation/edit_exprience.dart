@@ -185,7 +185,7 @@ class _EditExperienceScreenState extends State<EditExperienceScreen> {
                                 },
                                 child: Button_default(
                                   height: 56,
-                                  title: "save_changes".tr(),
+                                  title: "Save Edit".tr(),
                                   color: const Color(0xff207954),
                                 ),
                               ),
