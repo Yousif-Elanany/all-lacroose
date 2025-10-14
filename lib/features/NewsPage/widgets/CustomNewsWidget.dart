@@ -62,41 +62,41 @@ class NewsCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 4.0),
-                      width: 80,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Color(0xffFFDB99),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                        ),
-                        //  borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Center(
-                        child: (newsItem.oldOrNew??true)?Text(
-                           'Old'.tr(),
-                          style: TextStyle(
-                            color: Color(0xff333333),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ):Text(
-                          'New'.tr(),
-                          style: TextStyle(
-                            color: Color(0xff333333),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Positioned(
+                  //   top: 0,
+                  //   left: 0,
+                  //   child: Container(
+                  //     padding: const EdgeInsets.symmetric(
+                  //         horizontal: 12.0, vertical: 4.0),
+                  //     width: 80,
+                  //     height: 35,
+                  //     decoration: BoxDecoration(
+                  //       color: Color(0xffFFDB99),
+                  //       borderRadius: BorderRadius.only(
+                  //         topLeft: Radius.circular(30),
+                  //         bottomRight: Radius.circular(30),
+                  //       ),
+                  //       //  borderRadius: BorderRadius.circular(8.0),
+                  //     ),
+                  //     child: Center(
+                  //       child: (newsItem.oldOrNew??true)?Text(
+                  //          'Old'.tr(),
+                  //         style: TextStyle(
+                  //           color: Color(0xff333333),
+                  //           fontWeight: FontWeight.bold,
+                  //           fontSize: 12,
+                  //         ),
+                  //       ):Text(
+                  //         'New'.tr(),
+                  //         style: TextStyle(
+                  //           color: Color(0xff333333),
+                  //           fontWeight: FontWeight.bold,
+                  //           fontSize: 12,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               // Title and description

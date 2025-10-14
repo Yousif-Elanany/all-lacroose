@@ -27,11 +27,18 @@ class _Editeaccountpage extends State<Editeaccountpage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   var _userNameController = TextEditingController();
-
   var _phoneController = TextEditingController();
+  bool loading = false;
   String? imageLink;
   File? selectedImage1;
   final ImagePicker _picker = ImagePicker();
+  @override
+  void initState() {
+    super.initState();
+    _userNameController.text = CacheHelper.getData(key: "UserName") ?? "";
+;
+    imageLink = CacheHelper.getData(key: "UserPhoto");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,221 +53,240 @@ class _Editeaccountpage extends State<Editeaccountpage> {
       if (state is editUserProfileFailure) {
         _showAwesomeErrorDialog(context, state.errorMessage);
       }
+      if (state is editUserProfileLoading) {
+        setState(() {
+          loading = true;
+        });
+      } else {
+        setState(() {
+          loading = false;
+        });
+      }
     }, builder: (context, state) {
       return GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
         child: Scaffold(
+            backgroundColor: Colors.white,
             body: Stack(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.13,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                        'assets/images/top bar.png'), // Replace with your asset path
-                    fit: BoxFit.cover, // Adjust to control how the image fits
-                  ),
-                  gradient: LinearGradient(
-                    colors: [Colors.green.shade700, Colors.green.shade100],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //     SizedBox(height: MediaQuery.of(context).size.height*0.11,),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 0.0, right: 0, bottom: 20, top: 45.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.6),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(8)),
-                              ),
-                              child: const Icon(
-                                Icons.arrow_back_ios_outlined,
-                                color: Color(0xff185A3F),
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            "chang account data".tr(),
-                            style: const TextStyle(
-                              color: Color(0xff185A3F),
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.13,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                            'assets/images/top bar.png'), // Replace with your asset path
+                        fit: BoxFit
+                            .cover, // Adjust to control how the image fits
+                      ),
+                      gradient: LinearGradient(
+                        colors: [Colors.green.shade700, Colors.green.shade100],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
                       ),
                     ),
-                    SizedBox(
-                      height: 0,
-                    ), //  MediaQuery.of(context).size.height * 0.140),
-
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Stack(
-                              // alignment: Alignment.bottomLeft, // المحاذاة السفلية اليسرى
-                              children: [
-                                Container(
-                                  // color: Colors.amber,
-                                  //padding: EdgeInsets.only(),
-
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 40, // حجم الصورة الكبيرة
-                                    // backgroundImage: NetworkImage(
-                                    //   CacheHelper.getData(key: "UserPhoto")??"",
-                                    // ),
-                                    backgroundImage: selectedImage1 != null
-                                        ? FileImage(selectedImage1!)
-                                        : NetworkImage(
-                                            CacheHelper.getData(
-                                                    key: "UserPhoto") ??
-                                                "",
-                                          ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //     SizedBox(height: MediaQuery.of(context).size.height*0.11,),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 0.0, right: 0, bottom: 20, top: 45.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.6),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8)),
+                                  ),
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_outlined,
+                                    color: Color(0xff185A3F),
+                                    size: 20,
                                   ),
                                 ),
-                                Positioned(
-                                  bottom:
-                                      0, // لضبط الأيقونة أقرب للحافة السفلية
-                                  left: 0, // لضبطها أقرب للحافة اليسرى
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      _showPickerDialog(context);
+                              ),
+                              Text(
+                                "chang account data".tr(),
+                                style: const TextStyle(
+                                  color: Color(0xff185A3F),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 0,
+                        ), //  MediaQuery.of(context).size.height * 0.140),
 
-                                      setState(() {});
-                                    },
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Stack(
+                                  // alignment: Alignment.bottomLeft, // المحاذاة السفلية اليسرى
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        // color: Colors.amber,
+                                        //padding: EdgeInsets.only(),
 
-                                      radius: 12, // حجم الصورة الكبيرة
-                                      child: Image(
-                                        image: AssetImage(
-                                          "assets/images/upload1.png", // الصورة الكبيرة
+                                        child: CircleAvatar(
+                                          backgroundColor: Color(0xff207954),
+                                          radius: 40, // حجم الصورة الكبيرة
+                                          // backgroundImage: NetworkImage(
+                                          //   CacheHelper.getData(key: "UserPhoto")??"",
+                                          // ),
+                                          backgroundImage: selectedImage1 !=
+                                                  null
+                                              ? FileImage(selectedImage1!)
+                                              : NetworkImage(
+                                                  CacheHelper.getData(
+                                                          key: "UserPhoto") ??
+                                                      "",
+                                                ),
                                         ),
-                                        fit: BoxFit.cover,
                                       ),
                                     ),
+                                    Positioned(
+                                      bottom:
+                                          5, // لضبط الأيقونة أقرب للحافة السفلية
+                                      left: 5, // لضبطها أقرب للحافة اليسرى
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          _showPickerDialog(context);
+
+                                          setState(() {});
+                                        },
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.white,
+
+                                          radius: 12, // حجم الصورة الكبيرة
+                                          child: Image(
+                                            image: AssetImage(
+                                              "assets/images/upload1.png", // الصورة الكبيرة
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 24,
+                                ),
+                                defaultFormField(
+                                  label: "userName".tr(),
+                                  type: TextInputType.emailAddress,
+                                  controller: _userNameController,
+                                  validate: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Required'.tr();
+                                    }
+                                    // }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                defaultFormField(
+                                  label: "phone_number".tr(),
+                                  //isPassword: true,
+                                  type: TextInputType.text,
+                                  controller: _phoneController,
+                                  validate: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Required'.tr();
+                                    } else if (!RegExp(
+                                            r'^(?:\+966|00966|0)?5[0-9]{8}$')
+                                        .hasMatch(value))
+                                      return "inـvalid_phone_number"
+                                          .tr(); //"Password must be at least 8 characters, include upper/lowercase, a number, and a special character";
+
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * .49,
+                                  // height: MediaQuery.of(context).size.height*.46,
+                                ),
+                                Center(
+                                  child: GestureDetector(
+                                    child: loading
+                                        ? Center(
+                                            child: CircularProgressIndicator(
+                                            color: Color(0xff207954),
+                                          ))
+                                        : Button_default(
+                                            height: 56,
+                                            title: "chang account data".tr(),
+                                            color: Color(0xff207954),
+                                            colortext: Colors.white,
+                                          ),
+                                    onTap: () {
+                                      if (formKey.currentState!.validate()) {
+                                        setState(() {
+                                          // print(_userNameController.text);
+                                          // print(imageLink);
+
+                                          print(CacheHelper.getData(
+                                              key: "UserName"));
+                                          context
+                                              .read<AccountCubit>()
+                                              .editUserProfile(
+                                                  image:
+                                                  imageLink ?? CacheHelper.getData(key: "UserPhote"),
+                                                  phoneNumber:
+                                                      _phoneController.text,
+                                                  displayName:
+                                                      _userNameController.text);
+                                        });
+                                        _phoneController.clear();
+                                        _userNameController.clear();
+                                        selectedImage1 = null;
+                                      }
+                                    },
                                   ),
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * .02,
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 24,
-                            ),
-                            defaultFormField(
-                              label: "userName".tr(),
-                              type: TextInputType.emailAddress,
-                              controller: _userNameController,
-                              validate: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Required'.tr();
-                                }
-                                // }
-                                return null;
-                              },
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            defaultFormField(
-                              label: "phone_number".tr(),
-                              //isPassword: true,
-                              type: TextInputType.text,
-                              controller: _phoneController,
-                              validate: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Required'.tr();
-                                } else if (!RegExp(
-                                        r'^(?:\+966|00966|0)?5[0-9]{8}$')
-                                    .hasMatch(value))
-                                  return "inـvalid_phone_number"
-                                      .tr(); //"Password must be at least 8 characters, include upper/lowercase, a number, and a special character";
-
-                                return null;
-                              },
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * .49,
-                              // height: MediaQuery.of(context).size.height*.46,
-                            ),
-                            Center(
-                              child: GestureDetector(
-                                child: Button_default(
-                                  height: 56,
-                                  title: "chang account data".tr(),
-                                  color: Color(0xff207954),
-                                  colortext: Colors.white,
-                                ),
-                                onTap: (state is editUserProfileLoading)
-                                    ? null
-                                    : () {
-                                        if (formKey.currentState!.validate()) {
-                                          setState(() {
-                                            // print(_userNameController.text);
-                                            // print(imageLink);
-
-                                            print(CacheHelper.getData(
-                                                key: "UserName"));
-                                            context
-                                                .read<AccountCubit>()
-                                                .editUserProfile(
-                                                    image:
-                                                        "Images/UserImages/08aa87af-9a45-4b8e-84d3-9eeb7830d728.png",
-                                                    phoneNumber:
-                                                        _phoneController.text,
-                                                    displayName:
-                                                        _userNameController
-                                                            .text);
-                                          });
-                                          _phoneController.clear();
-                                          _userNameController.clear();
-                                          selectedImage1 = null;
-                                        }
-                                      },
-                              ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * .02,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        )),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            )),
       );
     });
   }

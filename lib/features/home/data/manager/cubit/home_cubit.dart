@@ -750,4 +750,43 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(GetHomeEventsFailure(e.response!.data.toString()));
     }
   }
+
+ addMatch(
+      {required String? matchDate,
+        required  int? teamNum1Id,
+        required  int? teamNum2Id,
+        required  int? teamNum1Goals,
+        required  int? teamNum2Goals}) async {
+    // 1️⃣ حالة التحميل
+    emit(AddMatchLoading());
+
+    try {
+      final response = await dioService.postWithToken(
+        "api/Match",
+        data: {
+          "firstTeamId": teamNum1Id,
+          "secondTeamId": teamNum2Id,
+          "totalFirstTeamGoals": teamNum1Goals,
+          "totalSecondTeamGoals": teamNum2Goals,
+          "matchTime": matchDate
+        },
+      );
+
+      // 2️⃣ حالة النجاح
+      if (response.statusCode == 200) {
+        emit(AddMatchSuccess());
+
+        // ⬅ هنا استدعي جلب كل الملاعب لتحديث القائمة تلقائياً
+        await fetchAllmatches();
+      }
+      // 3️⃣ حالة الفشل
+      else {
+        emit(AddMatchFailure(
+            "لم يتم إضافة الملعب، كود الحالة: ${response.statusCode}"));
+      }
+    } catch (e) {
+      // 3️⃣ حالة الفشل عند حدوث استثناء
+      emit(AddMatchFailure("حدث خطأ أثناء العملية: $e"));
+    }
+  }
 }

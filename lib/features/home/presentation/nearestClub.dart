@@ -28,7 +28,7 @@ class _NearestClubState extends State<NearestClub> {
   @override
   void initState() {
     super.initState();
-    polylinePoints = PolylinePoints();
+    polylinePoints = PolylinePoints(apiKey: 'AIzaSyC0hAS3zDVm4czww_CNmgFUqlvaYVXwsZU');
     _getCurrentLocation();
   }
 
@@ -115,7 +115,7 @@ class _NearestClubState extends State<NearestClub> {
       Response response = await dio.get(url);
 
       if (response.statusCode == 200 && response.data["status"] == "OK") {
-        List<PointLatLng> result = polylinePoints.decodePolyline(
+        List<PointLatLng> result = PolylinePoints .decodePolyline(
             response.data["routes"][0]["overview_polyline"]["points"]);
 
         List<LatLng> routeCoords =

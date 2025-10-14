@@ -125,7 +125,7 @@ class _BasescreenState extends State<Basescreen> {
                   return CircleAvatar(
                     radius: 20,
                     backgroundImage: NetworkImage(
-                      state.userPhoto,
+                      CacheHelper.getData(key: "UserPhoto"),
                     ),
                   );
                 }

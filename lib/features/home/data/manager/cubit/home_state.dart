@@ -335,3 +335,15 @@ class EditTeamFailure extends HomeStates {
 
     GetHomeEventsFailure(this.errorMessage);
   }
+  class AddMatchLoading extends HomeStates {}
+
+  // Success
+  class AddMatchSuccess extends HomeStates {
+
+  }
+
+  // Failure
+  class AddMatchFailure extends HomeStates {
+    final String errorMessage;
+    AddMatchFailure(this.errorMessage);
+  }

@@ -8,6 +8,7 @@
 
 import '../../model/questionModel.dart';
 import '../../model/updateUserDataModel.dart';
+import '../../model/userInfoModel.dart';
 
 abstract class AccountState {}
 
@@ -32,12 +33,10 @@ class QuestionFailure extends AccountState {
 class editUserProfileLoading extends AccountState {}
 
 class editUserProfileSuccess extends AccountState {
-  final String userName;
-  final String userPhoto;
-  final String userPhone;
 
 
-  editUserProfileSuccess(this.userName,this.userPhoto,this.userPhone);
+
+  editUserProfileSuccess();
 }
 
 class editUserProfileFailure extends AccountState {
@@ -58,4 +57,20 @@ class Image_videoFailure extends AccountState {
   final String errorMessage;
 
   Image_videoFailure(this.errorMessage);
+}
+
+
+class getUserInfoloading extends AccountState {}
+class getUserInfoSuccess extends AccountState {
+  final UserInfoModel model;
+
+  getUserInfoSuccess(this.model);
+
+
+}
+
+class getUserInfoFailure extends AccountState {
+  final String errorMessage;
+
+  getUserInfoFailure(this.errorMessage);
 }

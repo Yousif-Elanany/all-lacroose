@@ -208,7 +208,7 @@ class _Accountpage_managerState extends State<Accountpage_manager> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                       state.userName,
+                                  CacheHelper.getData(key: "UserName"),
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w500,
@@ -220,7 +220,7 @@ class _Accountpage_managerState extends State<Accountpage_manager> {
                                       ),
 
                                       Text(
-                                        "\u200E${state.userPhone}", // يجبر الرقم على الظهور بشكل صحيح حتى مع RTL
+                                        CacheHelper.getData(key: "UserPhone"), // يجبر الرقم على الظهور بشكل صحيح حتى مع RTL
                                         style: TextStyle(
                                           color: Colors.black45,
                                           fontSize: 14,
@@ -294,7 +294,7 @@ class _Accountpage_managerState extends State<Accountpage_manager> {
                                           0.005,
                                     ),
                                     Text(
-                                      CacheHelper.getData(key: "UserPhone")??"phone",
+                                        CacheHelper.getData(key: "UserPhone")??"phone",
                                       style: TextStyle(
                                         color: Colors.black45,
 
