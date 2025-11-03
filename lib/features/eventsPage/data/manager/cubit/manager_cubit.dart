@@ -268,7 +268,7 @@ class managerCubit extends Cubit<ManagerStates> {
     required int teamType,
     required String description,
     required int firstTeamId,
-    required int secondTeamId,
+     int? secondTeamId,
     required List<ApplicationUserInternalEvent> listApplicationPlayers,
     required List<InternalEventFile> listApplicationLink,
   }) async {
@@ -331,6 +331,8 @@ class managerCubit extends Cubit<ManagerStates> {
     required String endDate_Time,
     required String location,
     required String eventName,
+    required int firstTeamId,
+     int? secondTeamId,
     required String description,
     required int teamType,
     required List<ApplicationUserInternalEvent> listApplicationPlayers,
@@ -347,6 +349,8 @@ class managerCubit extends Cubit<ManagerStates> {
           "to": endDate_Time, //"2025-01-04T21:02:17.427Z",
           "eventLocation": location,
           "description": description,
+          "firstTeamId": firstTeamId, //firstTeamId,//3,
+          "secondTeamId": secondTeamId, //secondTeamId,// 6,
           "teamType": teamType,
           "applicationUserInternalEvents": toJsonList(listApplicationPlayers),
 

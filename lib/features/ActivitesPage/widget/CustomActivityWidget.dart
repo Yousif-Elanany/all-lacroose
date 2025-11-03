@@ -245,7 +245,7 @@ class acticityWidget extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => activityDeatlScreen(eventModel.id)));
+                          builder: (context) => ActivityDetailScreen(eventModel.id)));
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(

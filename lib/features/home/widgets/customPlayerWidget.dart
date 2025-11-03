@@ -246,7 +246,7 @@ class _CustomplayerWidgetState extends State<Customplayerwidget> {
               if (state is DeletePlayerSuccess) {
                 Navigator.pop(context); // إغلاق الـ Dialog
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("player_deleted_success".tr())),
+                  SnackBar(content: Text("User_deleted_success".tr())),
                 );
               } else if (state is DeletePlayerFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(

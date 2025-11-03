@@ -90,12 +90,12 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton_Teams> {
             widget.onChanged!(newValue);
           }
         },
-        validator: (value) {
-          if (value == null) {
-            return 'Please_select_a_team'.tr();
-          }
-          return null;
-        },
+        // validator: (value) {
+        //   if (value == null) {
+        //     return 'Please_select_a_team'.tr();
+        //   }
+        //   return null;
+        // },
         dropdownColor: const Color(0xfff9f9f9),
         borderRadius: BorderRadius.circular(12),
         decoration: const InputDecoration(

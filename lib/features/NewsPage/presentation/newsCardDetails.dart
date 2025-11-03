@@ -52,11 +52,15 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                   backgroundColor: Colors.green,
                 ),
               );
-              context.read<NewsCubit>().fetchAllNewsData(); // ✅ إعادة تحميل الأخبار
+              context
+                  .read<NewsCubit>()
+                  .fetchAllNewsData(); // ✅ إعادة تحميل الأخبار
             } else if (state is EditNewsFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.message.isNotEmpty ? state.message : "edit_failure".tr()), // ✅ ترجمة الخطأ
+                  content: Text(state.message.isNotEmpty
+                      ? state.message
+                      : "edit_failure".tr()), // ✅ ترجمة الخطأ
                   backgroundColor: Colors.red,
                 ),
               );
@@ -141,8 +145,8 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                                 ),
                               ),
 
-                              if (CacheHelper.getData(key: "accessToken") !=
-                                  null) ...[
+                              if (CacheHelper.getData(key: "roles") ==
+                                  "Admin") ...[
                                 const Spacer(),
                                 // زرار Edit
                                 GestureDetector(
@@ -151,32 +155,42 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                                       context: context,
                                       isScrollControlled: true,
                                       shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(16)),
                                       ),
                                       builder: (context) {
-                                        final titleController = TextEditingController(text: newsModel.title);
-                                        final descController = TextEditingController(text: newsModel.content);
+                                        final titleController =
+                                            TextEditingController(
+                                                text: newsModel.title);
+                                        final descController =
+                                            TextEditingController(
+                                                text: newsModel.content);
 
-                                        File? pickedImage; // هنا نخزن الصورة الجديدة اللي المستخدم هيختارها
+                                        File?
+                                            pickedImage; // هنا نخزن الصورة الجديدة اللي المستخدم هيختارها
 
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return Padding(
                                               padding: EdgeInsets.only(
-                                                bottom: MediaQuery.of(context).viewInsets.bottom,
+                                                bottom: MediaQuery.of(context)
+                                                    .viewInsets
+                                                    .bottom,
                                                 left: 16,
                                                 right: 16,
                                                 top: 24,
                                               ),
                                               child: SingleChildScrollView(
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     Text(
                                                       "edit_news".tr(),
                                                       style: const TextStyle(
                                                         fontSize: 18,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                     const SizedBox(height: 20),
@@ -184,62 +198,93 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                                                     // صورة الخبر
                                                     GestureDetector(
                                                       onTap: () async {
-                                                        final image = await ImagePicker()
-                                                            .pickImage(source: ImageSource.gallery);
+                                                        final image =
+                                                            await ImagePicker()
+                                                                .pickImage(
+                                                                    source: ImageSource
+                                                                        .gallery);
                                                         if (image != null) {
                                                           setState(() {
-                                                            pickedImage = File(image.path);
+                                                            pickedImage = File(
+                                                                image.path);
                                                           });
                                                         }
                                                       },
                                                       child: Container(
                                                         height: 150,
                                                         width: double.infinity,
-                                                        decoration: BoxDecoration(
-                                                          border: Border.all(color: Colors.grey),
-                                                          borderRadius: BorderRadius.circular(12),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
                                                         ),
-                                                        child: pickedImage != null
-                                                            ? ClipRRect(
-                                                          borderRadius: BorderRadius.circular(12),
-                                                          child: Image.file(
-                                                            pickedImage!,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        )
-                                                            : ClipRRect(
-                                                          borderRadius: BorderRadius.circular(12),
-                                                          child: Image.network(
-                                                            newsModel.img ?? "",
-                                                            fit: BoxFit.cover,
-                                                            errorBuilder: (context, error, stackTrace) {
-                                                              return Center(
-                                                                child: Icon(Icons.image,
-                                                                    size: 50, color: Colors.grey),
-                                                              );
-                                                            },
-                                                          ),
-                                                        ),
+                                                        child:
+                                                            pickedImage != null
+                                                                ? ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12),
+                                                                    child: Image
+                                                                        .file(
+                                                                      pickedImage!,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  )
+                                                                : ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12),
+                                                                    child: Image
+                                                                        .network(
+                                                                      newsModel
+                                                                              .img ??
+                                                                          "",
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      errorBuilder: (context,
+                                                                          error,
+                                                                          stackTrace) {
+                                                                        return Center(
+                                                                          child: Icon(
+                                                                              Icons.image,
+                                                                              size: 50,
+                                                                              color: Colors.grey),
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                  ),
                                                       ),
                                                     ),
                                                     const SizedBox(height: 20),
 
                                                     // حقل العنوان
                                                     TextFormField(
-                                                      controller: titleController,
-                                                      decoration: InputDecoration(
+                                                      controller:
+                                                          titleController,
+                                                      decoration:
+                                                          InputDecoration(
                                                         labelText: "title".tr(),
-                                                        border: const OutlineInputBorder(),
+                                                        border:
+                                                            const OutlineInputBorder(),
                                                       ),
                                                     ),
                                                     const SizedBox(height: 12),
 
                                                     // حقل الوصف
                                                     TextFormField(
-                                                      controller: descController,
-                                                      decoration: InputDecoration(
-                                                        labelText: "description".tr(),
-                                                        border: const OutlineInputBorder(),
+                                                      controller:
+                                                          descController,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        labelText:
+                                                            "description".tr(),
+                                                        border:
+                                                            const OutlineInputBorder(),
                                                       ),
                                                       maxLines: 3,
                                                     ),
@@ -250,30 +295,47 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                                                         Expanded(
                                                           child: OutlinedButton(
                                                             onPressed: () {
-                                                              Navigator.pop(context);
+                                                              Navigator.pop(
+                                                                  context);
                                                             },
                                                             child: Text(
                                                               "cancel".tr(),
-                                                              style: const TextStyle(color: Color(0xff185A3F)),
+                                                              style: const TextStyle(
+                                                                  color: Color(
+                                                                      0xff185A3F)),
                                                             ),
                                                           ),
                                                         ),
-                                                        const SizedBox(width: 10),
+                                                        const SizedBox(
+                                                            width: 10),
                                                         Expanded(
                                                           child: ElevatedButton(
-                                                            style: ElevatedButton.styleFrom(
-                                                              backgroundColor: Color(0xff185A3F),
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0xff185A3F),
                                                             ),
-                                                            onPressed: () async {
+                                                            onPressed:
+                                                                () async {
+                                                              String?
+                                                                  uploadedImageUrl;
 
-                                                              String? uploadedImageUrl;
-
-                                                              if (pickedImage != null) {
-                                                                uploadedImageUrl = await context.read<NewsCubit>()
-                                                                    .uploadImage_video(file: pickedImage!);
-                                                                print("📸 Uploaded image URL: $uploadedImageUrl");
+                                                              if (pickedImage !=
+                                                                  null) {
+                                                                uploadedImageUrl = await context
+                                                                    .read<
+                                                                        NewsCubit>()
+                                                                    .uploadImage_video(
+                                                                        file:
+                                                                            pickedImage!);
+                                                                print(
+                                                                    "📸 Uploaded image URL: $uploadedImageUrl");
                                                               } else {
-                                                                uploadedImageUrl = newsModel.img;
+                                                                uploadedImageUrl =
+                                                                    newsModel
+                                                                        .img;
                                                               }
                                                               // print("📤 Final Update Data: ${NewsModel(
                                                               //   id: widget.newsId,
@@ -283,20 +345,31 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                                                               //   newsDetails: newsModel.newsDetails,
                                                               // ).toUpdateJson()}");
                                                               // استدعاء Cubit للتحديث
-                                                              context.read<NewsCubit>().EditNews(
-                                                                NewsModel(
-                                                                  id: widget.newsId,
-                                                                  img: uploadedImageUrl,
-                                                                  title: titleController.text,
-                                                                  content: descController.text,
-                                                                  newsDetails: newsModel.newsDetails, // اللي المستخدم عدلها
-                                                                ),
-                                                              );
-
+                                                              context
+                                                                  .read<
+                                                                      NewsCubit>()
+                                                                  .EditNews(
+                                                                    NewsModel(
+                                                                      id: widget
+                                                                          .newsId,
+                                                                      img:
+                                                                          uploadedImageUrl,
+                                                                      title: titleController
+                                                                          .text,
+                                                                      content:
+                                                                          descController
+                                                                              .text,
+                                                                      newsDetails:
+                                                                          newsModel
+                                                                              .newsDetails, // اللي المستخدم عدلها
+                                                                    ),
+                                                                  );
                                                             },
                                                             child: Text(
                                                               "update".tr(),
-                                                              style: const TextStyle(color: Colors.white),
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white),
                                                             ),
                                                           ),
                                                         ),
@@ -328,7 +401,6 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                                     ),
                                   ),
                                 ),
-
 
                                 const SizedBox(width: 10),
 

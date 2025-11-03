@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -35,9 +36,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final fcm= await NotificationService.instance.initialize();
-  print(fcm);
-  CacheHelper.saveData(key: "FcmToken", value: fcm);
+
+ // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  final fcm = await NotificationService.instance.initialize();
+  print("🔥 FCM TOKEN: $fcm");
+  await CacheHelper.saveData(key: "FcmToken", value: fcm);
+
   await EasyLocalization.ensureInitialized();
   await initializeDateFormatting('ar', null); // أو استخدم Platform.localeName لو عايز تلقائي
 

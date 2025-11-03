@@ -37,6 +37,7 @@ class _Add_eventState extends State<Add_event> {
 
   bool is_match = true;
   bool is_other = false;
+  bool is_training = false;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final CustomDropdownController dropdownController =
@@ -83,6 +84,27 @@ class _Add_eventState extends State<Add_event> {
   String date_timeTo2(DateTime? toDay) {
     if (toDay == null) return "";
     return DateFormat('yyyy-MM-dd').format(toDay);
+  }
+
+  bool validateTeamsSelection() {
+    if (is_training) {
+      // لازم يختار فريق واحد على الأقل
+      if (participateTeams.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("من فضلك اختر فريق واحد على الأقل للتدريب")),
+        );
+        return false;
+      }
+    } else if (is_match) {
+      // لازم يختار فريقين بالضبط
+      if (participateTeams.length != 2) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("يجب اختيار فريقين للمباراة")),
+        );
+        return false;
+      }
+    }
+    return true;
   }
 
   @override
@@ -459,6 +481,7 @@ class _Add_eventState extends State<Add_event> {
                                             setState(() {
                                               is_match = true;
                                               is_other = false;
+                                              is_training = false;
                                               // لو عندك متغير تاني للتدريب ممكن تضبطه كمان
                                             });
                                           },
@@ -503,6 +526,7 @@ class _Add_eventState extends State<Add_event> {
                                             setState(() {
                                               is_match = false;
                                               is_other = false;
+                                              is_training = true;
                                             });
                                           },
                                           child: Container(
@@ -546,6 +570,7 @@ class _Add_eventState extends State<Add_event> {
                                             setState(() {
                                               is_match = false;
                                               is_other = true;
+                                              is_training = false;
                                             });
                                           },
                                           child: Container(
@@ -736,7 +761,7 @@ class _Add_eventState extends State<Add_event> {
                                       height:
                                           10, //  height: MediaQuery.of(context).size.height * .3,
                                     ),
-                                    is_match && !is_other
+                                    (is_match || is_training)
                                         ? CustomDropdownButton_Teams(
                                             controller: dropdownControllerTeams,
                                             items: all_teams,
@@ -748,7 +773,6 @@ class _Add_eventState extends State<Add_event> {
                                                   participateTeams.length <=
                                                       1) {
                                                 participateTeams.add(value);
-
                                                 setState(() {});
                                               }
                                             },
@@ -757,7 +781,7 @@ class _Add_eventState extends State<Add_event> {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    is_match
+                                    (is_match || is_training)
                                         ? Container(
                                             height: participateTeams.isEmpty
                                                 ? 0
@@ -891,6 +915,35 @@ class _Add_eventState extends State<Add_event> {
                                           : () async {
                                               if (formKey.currentState!
                                                   .validate()) {
+                                                // ✅ أولاً نتحقق من اختيار الفرق حسب نوع الحدث
+                                                if (is_training &&
+                                                    participateTeams.length <
+                                                        1) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                          "select_one_team_training"
+                                                              .tr()),
+                                                    ),
+                                                  );
+                                                  return;
+                                                }
+
+                                                if (is_match &&
+                                                    participateTeams.length <
+                                                        2) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                        content: Text(
+                                                            "select_two_teams_match"
+                                                                .tr())),
+                                                  );
+                                                  return;
+                                                }
+
+                                                /// ✅ بعد الفاليديشن نكمل الكود الأصلي
                                                 List<ApplicationUserInternalEvent>
                                                     listApplicationPlayers = [];
                                                 for (int i = 0;
@@ -898,12 +951,14 @@ class _Add_eventState extends State<Add_event> {
                                                     i++) {
                                                   listApplicationPlayers.add(
                                                     ApplicationUserInternalEvent(
-                                                        applicationUserId:
-                                                            eventParticipate[i]
-                                                                .id,
-                                                        internalEventId: 0),
+                                                      applicationUserId:
+                                                          eventParticipate[i]
+                                                              .id,
+                                                      internalEventId: 0,
+                                                    ),
                                                   );
                                                 }
+
                                                 List<InternalEventFile>
                                                     listApplicationFiles = [];
                                                 for (int i = 0;
@@ -913,24 +968,15 @@ class _Add_eventState extends State<Add_event> {
                                                     i++) {
                                                   listApplicationFiles.add(
                                                     InternalEventFile(
-                                                        internalEventId: 0,
-                                                        file:
-                                                            list_uploaded_link[
-                                                                i]),
+                                                      internalEventId: 0,
+                                                      file:
+                                                          list_uploaded_link[i],
+                                                    ),
                                                   );
                                                 }
-                                                //  print(listApplicationFiles[0].file);
 
-                                                for (var model
-                                                    in listApplicationFiles) {
-                                                  print(model.toString());
-                                                }
-
-                                                /// print( CacheHelper.getData(key: "FcmToken"));
-
-                                                //   add event ///
-
-                                                if (is_match && !!is_other) {
+                                                // تنفيذ نوع الحدث حسب الحالة
+                                                if (is_match) {
                                                   print(
                                                       "_eventName.text   match /////////////");
                                                   BlocProvider.of<managerCubit>(
@@ -956,68 +1002,70 @@ class _Add_eventState extends State<Add_event> {
                                                     teamType:
                                                         selectedValue ?? 0,
                                                   );
-                                                } else if (is_other &&
-                                                    !is_match) {
+                                                } else if (is_other) {
                                                   BlocProvider.of<managerCubit>(
                                                           context)
                                                       .addEvent(
-                                                          Name: _eventName.text,
-                                                          file: list_selected_mediaFile
-                                                                  .isNotEmpty
-                                                              ? list_selected_mediaFile[
-                                                                  0]
-                                                              : null,
-                                                          Description:
-                                                              _eventDescription
-                                                                  .text,
-                                                          Location:
-                                                              _eventLocatioin
-                                                                  .text,
-                                                          FromDay:
-                                                              _eventdate.text,
-                                                          ToDay:
-                                                              _eventdate2.text,
-                                                          FromTime: firstTime !=
-                                                                  null
-                                                              ? formatTimeOfDay(
-                                                                  firstTime!)
-                                                              : "",
-                                                          ToTime: secondTime !=
-                                                                  null
-                                                              ? formatTimeOfDay(
-                                                                  secondTime!)
-                                                              : "");
+                                                    Name: _eventName.text,
+                                                    file: list_selected_mediaFile
+                                                            .isNotEmpty
+                                                        ? list_selected_mediaFile[
+                                                            0]
+                                                        : null,
+                                                    Description:
+                                                        _eventDescription.text,
+                                                    Location:
+                                                        _eventLocatioin.text,
+                                                    FromDay: _eventdate.text,
+                                                    ToDay: _eventdate2.text,
+                                                    FromTime: firstTime != null
+                                                        ? formatTimeOfDay(
+                                                            firstTime!)
+                                                        : "",
+                                                    ToTime: secondTime != null
+                                                        ? formatTimeOfDay(
+                                                            secondTime!)
+                                                        : "",
+                                                  );
                                                 } else {
-                                                  BlocProvider.of<
-                                                          managerCubit>(context)
+                                                  BlocProvider.of<managerCubit>(
+                                                          context)
                                                       .addNewTrainingEvent(
-                                                          teamType:
-                                                              selectedValue ??
-                                                                  0,
-                                                          eventType: 1,
-                                                          startDate_Time:
-                                                              date_timeFrom(),
-                                                          endDate_Time:
-                                                              date_timeTo(),
-                                                          description:
-                                                              _eventDescription
-                                                                  .text,
-                                                          eventName:
-                                                              _eventName.text,
-                                                          location:
-                                                              _eventLocatioin
-                                                                  .text,
-                                                          listApplicationPlayers:
-                                                              listApplicationPlayers,
-                                                          listApplicationLink:
-                                                              listApplicationFiles);
+                                                    teamType:
+                                                        selectedValue ?? 0,
+                                                    eventType: 1,
+                                                    startDate_Time:
+                                                        date_timeFrom(),
+                                                    endDate_Time: date_timeTo(),
+                                                    description:
+                                                        _eventDescription.text,
+                                                    firstTeamId:
+                                                        participateTeams[0].id,
+                                                    secondTeamId:
+                                                        (participateTeams
+                                                                    .length >
+                                                                1)
+                                                            ? participateTeams[
+                                                                    1]
+                                                                .id
+                                                            : null,
+                                                    eventName: _eventName.text,
+                                                    location:
+                                                        _eventLocatioin.text,
+                                                    listApplicationPlayers:
+                                                        listApplicationPlayers,
+                                                    listApplicationLink:
+                                                        listApplicationFiles,
+                                                  );
                                                 }
+
+                                                // ✅ نرجّع القيم للوضع الافتراضي بعد الإرسال
                                                 setState(() {
                                                   _eventName.clear();
                                                   _eventLocatioin.clear();
-                                                  _eventName.clear();
                                                   _eventTime.clear();
                                                   _eventdate.clear();
+                                                  _eventdate2.clear();
                                                   _eventDescription.clear();
                                                   selectedValue = null;
                                                   eventParticipate.clear();
@@ -1031,7 +1079,10 @@ class _Add_eventState extends State<Add_event> {
                                               }
                                             },
                                       child: loading
-                                          ? Center(child: CircularProgressIndicator(color: Colors.green,))
+                                          ? Center(
+                                              child: CircularProgressIndicator(
+                                              color: Colors.green,
+                                            ))
                                           : Button_default(
                                               height: 56,
                                               title: "add_this_event".tr(),
