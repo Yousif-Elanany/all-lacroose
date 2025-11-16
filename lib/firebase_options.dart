@@ -41,53 +41,48 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyANL40C9XN0vDO4WJRHYUTn7A878d7kiJg',
-    appId: '1:966185766887:web:7278f765ff45da2994f742',
-    messagingSenderId: '966185766887',
-    projectId: 'lacrosse-app-ec697',
-    authDomain: 'lacrosse-app-ec697.firebaseapp.com',
-    databaseURL: 'https://lacrosse-app-ec697-default-rtdb.firebaseio.com',
-    storageBucket: 'lacrosse-app-ec697.firebasestorage.app',
-    measurementId: 'G-1M44MJEND9',
+    apiKey: 'AIzaSyA_02t5aoIlu6Tk-Aq1haDdU_VVc8i9kxU',
+    appId: '1:969831362695:web:54d26da5b73775c4108822',
+    messagingSenderId: '969831362695',
+    projectId: 'lacrooseapp',
+    authDomain: 'lacrooseapp.firebaseapp.com',
+    storageBucket: 'lacrooseapp.firebasestorage.app',
+    measurementId: 'G-E33XEGC4TV',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA9P2V8E6MxKgzACah38sJSBpugVhDp1b0',
-    appId: '1:966185766887:android:ccc1e74b693bf31d94f742',
-    messagingSenderId: '966185766887',
-    projectId: 'lacrosse-app-ec697',
-    databaseURL: 'https://lacrosse-app-ec697-default-rtdb.firebaseio.com',
-    storageBucket: 'lacrosse-app-ec697.firebasestorage.app',
+    apiKey: 'AIzaSyB14ZIWiCcYdyHsYCTf7EAc2ReD-QCavPU',
+    appId: '1:969831362695:android:230e086fd8652901108822',
+    messagingSenderId: '969831362695',
+    projectId: 'lacrooseapp',
+    storageBucket: 'lacrooseapp.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyACG-vb0vi8Uj7QcUBvp1sfkYk3uL6J-Xs',
-    appId: '1:966185766887:ios:1bdccf794a87669294f742',
-    messagingSenderId: '966185766887',
-    projectId: 'lacrosse-app-ec697',
-    databaseURL: 'https://lacrosse-app-ec697-default-rtdb.firebaseio.com',
-    storageBucket: 'lacrosse-app-ec697.firebasestorage.app',
-    iosBundleId: 'com.example.lacrosse',
+    apiKey: 'AIzaSyBfQm7mzcd3lRyJcSV0iZNUC4kmyqgc-mo',
+    appId: '1:969831362695:ios:760838c5fb92394a108822',
+    messagingSenderId: '969831362695',
+    projectId: 'lacrooseapp',
+    storageBucket: 'lacrooseapp.firebasestorage.app',
+    iosBundleId: 'com.Toq.lacrosseApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyACG-vb0vi8Uj7QcUBvp1sfkYk3uL6J-Xs',
-    appId: '1:966185766887:ios:1bdccf794a87669294f742',
-    messagingSenderId: '966185766887',
-    projectId: 'lacrosse-app-ec697',
-    databaseURL: 'https://lacrosse-app-ec697-default-rtdb.firebaseio.com',
-    storageBucket: 'lacrosse-app-ec697.firebasestorage.app',
-    iosBundleId: 'com.example.lacrosse',
+    apiKey: 'AIzaSyBfQm7mzcd3lRyJcSV0iZNUC4kmyqgc-mo',
+    appId: '1:969831362695:ios:760838c5fb92394a108822',
+    messagingSenderId: '969831362695',
+    projectId: 'lacrooseapp',
+    storageBucket: 'lacrooseapp.firebasestorage.app',
+    iosBundleId: 'com.Toq.lacrosseApp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyANL40C9XN0vDO4WJRHYUTn7A878d7kiJg',
-    appId: '1:966185766887:web:721eb224f544164d94f742',
-    messagingSenderId: '966185766887',
-    projectId: 'lacrosse-app-ec697',
-    authDomain: 'lacrosse-app-ec697.firebaseapp.com',
-    databaseURL: 'https://lacrosse-app-ec697-default-rtdb.firebaseio.com',
-    storageBucket: 'lacrosse-app-ec697.firebasestorage.app',
-    measurementId: 'G-CNLN7KM6QR',
+    apiKey: 'AIzaSyA_02t5aoIlu6Tk-Aq1haDdU_VVc8i9kxU',
+    appId: '1:969831362695:web:28b53005bbd92765108822',
+    messagingSenderId: '969831362695',
+    projectId: 'lacrooseapp',
+    authDomain: 'lacrooseapp.firebaseapp.com',
+    storageBucket: 'lacrooseapp.firebasestorage.app',
+    measurementId: 'G-7C9KZ15R4L',
   );
 }

@@ -1,4 +1,4 @@
-package com.example.lacrosse
+package com.Toq.lacrosseApp
 
 import io.flutter.embedding.android.FlutterActivity
 
