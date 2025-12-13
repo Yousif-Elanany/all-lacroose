@@ -7,20 +7,20 @@ import '../data/manager/cubit/home_cubit.dart';
 import '../data/models/model_team.dart';
 
 void showMatchBottomSheet(
-    BuildContext context, {
-      List<teamModels>? model,
-    }) {
+  BuildContext context, {
+  List<teamModels>? model,
+}) {
   // Convert list to Map containing id and name
   final List<Map<String, dynamic>> teams = model != null && model.isNotEmpty
       ? model
-      .map((e) => {'id': e.id, 'name': e.name ?? 'unknown_team'.tr()})
-      .toList()
+          .map((e) => {'id': e.id, 'name': e.name ?? 'unknown_team'.tr()})
+          .toList()
       : [
-    {'id': 1, 'name': 'ahly'.tr()},
-    {'id': 2, 'name': 'zamalek'.tr()},
-    {'id': 3, 'name': 'ittihad'.tr()},
-    {'id': 4, 'name': 'pyramids'.tr()},
-  ];
+          {'id': 1, 'name': 'ahly'.tr()},
+          {'id': 2, 'name': 'zamalek'.tr()},
+          {'id': 3, 'name': 'ittihad'.tr()},
+          {'id': 4, 'name': 'pyramids'.tr()},
+        ];
 
   Map<String, dynamic>? teamA;
   Map<String, dynamic>? teamB;
@@ -55,7 +55,7 @@ void showMatchBottomSheet(
     );
 
     final formatted =
-    DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!);
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!);
 
     setState(() {
       dateController.text = formatted;
@@ -84,7 +84,8 @@ void showMatchBottomSheet(
                 children: [
                   Text(
                     'add_match'.tr(),
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
 
@@ -93,6 +94,7 @@ void showMatchBottomSheet(
                     children: [
                       Expanded(
                         child: DropdownButtonFormField<Map<String, dynamic>>(
+                          isExpanded: true,
                           decoration: InputDecoration(
                             labelText: 'team_a'.tr(),
                             border: const OutlineInputBorder(),
@@ -101,10 +103,14 @@ void showMatchBottomSheet(
                           items: teams
                               .map(
                                 (t) => DropdownMenuItem<Map<String, dynamic>>(
-                              value: t,
-                              child: Text(t['name']),
-                            ),
-                          )
+                                  value: t,
+                                  child: Text(
+                                    t['name'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              )
                               .toList(),
                           onChanged: (v) => setState(() => teamA = v),
                         ),
@@ -112,6 +118,7 @@ void showMatchBottomSheet(
                       const SizedBox(width: 12),
                       Expanded(
                         child: DropdownButtonFormField<Map<String, dynamic>>(
+                          isExpanded: true,
                           decoration: InputDecoration(
                             labelText: 'team_b'.tr(),
                             border: const OutlineInputBorder(),
@@ -120,10 +127,14 @@ void showMatchBottomSheet(
                           items: teams
                               .map(
                                 (t) => DropdownMenuItem<Map<String, dynamic>>(
-                              value: t,
-                              child: Text(t['name']),
-                            ),
-                          )
+                                  value: t,
+                                  child: Text(
+                                    t['name'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              )
                               .toList(),
                           onChanged: (v) => setState(() => teamB = v),
                         ),
@@ -202,7 +213,7 @@ void showMatchBottomSheet(
                             }
 
                             final String formattedDate =
-                            selectedDateTime!.toUtc().toIso8601String();
+                                selectedDateTime!.toUtc().toIso8601String();
 
                             final data = {
                               'teamA_id': teamA?['id'],
@@ -213,12 +224,12 @@ void showMatchBottomSheet(
                             };
 
                             context.read<HomeCubit>().addMatch(
-                              matchDate: data['match_date'],
-                              teamNum1Id: data['teamA_id'],
-                              teamNum2Id: data['teamB_id'],
-                              teamNum1Goals: data['goalsA'],
-                              teamNum2Goals: data['goalsB'],
-                            );
+                                  matchDate: data['match_date'],
+                                  teamNum1Id: data['teamA_id'],
+                                  teamNum2Id: data['teamB_id'],
+                                  teamNum1Goals: data['goalsA'],
+                                  teamNum2Goals: data['goalsB'],
+                                );
 
                             Navigator.pop(context);
                           },

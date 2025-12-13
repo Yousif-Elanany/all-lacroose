@@ -148,7 +148,6 @@ class AuthCubit extends Cubit<AuthStates> {
   }) async {
     emit(LoginLoading());
     try {
-      // إرسال طلب تسجيل الدخول
       final response = await dioService.postWithoutToken(
         "api/Auth/login",
         data: {
@@ -157,35 +156,45 @@ class AuthCubit extends Cubit<AuthStates> {
         },
       );
 
-      // التحقق من حالة الاستجابة
       if (response.statusCode == 200) {
-        // معالجة بيانات تسجيل الدخول
         LoginModel model = LoginModel.fromJson(response.data);
+
+        // 🔹 تنظيف رقم الهاتف قبل التخزين
+        String phone = model.phoneNumber ?? "";
+        if (phone.startsWith('+966')) {
+          phone = phone.substring(4);
+        }
+
         await CacheHelper.saveData(key: "accessToken", value: model.accessToken);
-        await CacheHelper.saveData(key: "refreshTokenExpiration", value: model.refreshTokenExpiration);
+        await CacheHelper.saveData(
+          key: "refreshTokenExpiration",
+          value: model.refreshTokenExpiration,
+        );
         await CacheHelper.saveData(key: "UserName", value: model.displayName);
-        await CacheHelper.saveData(key: "UserPhone", value: model.phoneNumber);
+        await CacheHelper.saveData(key: "UserPhone", value: phone);
         await CacheHelper.saveData(key: "UserPhoto", value: model.image ?? "");
-        await CacheHelper.saveData(key: "roles", value: model.roles[0] ?? "");
+        await CacheHelper.saveData(
+          key: "roles",
+          value: model.roles.isNotEmpty ? model.roles[0] : "",
+        );
+
         print("توكن بعد تسجيل الدخول: ${model.accessToken}");
 
-        print("Login successful://////////////");
-
-        // استدعاء الـ API الثاني بعد تسجيل الدخول بنجاح
         await RegisterFcmToken();
 
         emit(LoginSuccess());
       } else {
-        // إذا كانت حالة الاستجابة ليست 200
-        emit(LoginFailure("Unexpected response status: ${response.statusCode}"));
+        emit(LoginFailure(
+          "Unexpected response status: ${response.statusCode}",
+        ));
       }
     } on DioException catch (e) {
-      print("/////Login Error////////////////////////");
-      print("/////Login////////${e.response?.data}////////////////");
-      print("////////Login/////////////////////");
-      emit(LoginFailure(e.response?.data.toString() ?? "Unknown error occurred"));
+      emit(LoginFailure(
+        e.response?.data.toString() ?? "Unknown error occurred",
+      ));
     }
   }
+
 
   Future<void> RegisterFcmToken() async {
     try {

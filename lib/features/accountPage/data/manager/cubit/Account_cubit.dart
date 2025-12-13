@@ -94,27 +94,27 @@ class AccountCubit extends Cubit<AccountState> {
       emit(editUserProfileFailure(e.toString()));
     }
   }
-
-  Future<void> updateUserProfile(
-      String? name, String? image, String? phone) async {
-    // final prefs = await SharedPreferences.getInstance();
-
-    // تحميل القيم الحالية من SharedPreferences إذا كانت القيم الجديدة null
-
-    String savedName = await CacheHelper.getData(key: "UserName") ?? "";
-    String savedImage = await CacheHelper.getData(key: "UserPhoto") ?? "";
-    String savedPhone = await CacheHelper.getData(key: "UserPhone") ?? "";
-
-    // تحديث القيم فقط إذا لم تكن `null`
-    String finalName = (name != null && name.isNotEmpty) ? name : savedName;
-    String finalImage = image ?? savedImage;
-    String finalPhone = phone ?? savedPhone;
-    await CacheHelper.saveData(key: "UserName", value: finalName);
-    await CacheHelper.saveData(key: "UserPhoto", value: finalImage);
-    await CacheHelper.saveData(key: "UserPhone", value: finalPhone);
-
-    emit(editUserProfileSuccess()); //  تحديث كل الصفحات
-  }
+  //
+  // Future<void> updateUserProfile(
+  //     String? name, String? image, String? phone) async {
+  //   // final prefs = await SharedPreferences.getInstance();
+  //
+  //   // تحميل القيم الحالية من SharedPreferences إذا كانت القيم الجديدة null
+  //
+  //   String savedName = await CacheHelper.getData(key: "UserName") ?? "";
+  //   String savedImage = await CacheHelper.getData(key: "UserPhoto") ?? "";
+  //   String savedPhone = await CacheHelper.getData(key: "UserPhone") ?? "";
+  //
+  //   // تحديث القيم فقط إذا لم تكن `null`
+  //   String finalName = (name != null && name.isNotEmpty) ? name : savedName;
+  //   String finalImage = image ?? savedImage;
+  //   String finalPhone = phone ?? savedPhone;
+  //   await CacheHelper.saveData(key: "UserName", value: finalName);
+  //   await CacheHelper.saveData(key: "UserPhoto", value: finalImage);
+  //   await CacheHelper.saveData(key: "UserPhone", value: finalPhone);
+  //
+  //   emit(editUserProfileSuccess()); //  تحديث كل الصفحات
+  // }
 
   Future<void> getUserInfo() async {
     print(" done  /////////////////////////////////");
