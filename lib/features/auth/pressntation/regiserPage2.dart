@@ -119,7 +119,7 @@ class _Registerpage2State extends State<Registerpage2> {
                 child: CircularProgressIndicator(
                   color: Colors.white,
                   strokeWidth: 2,
-                ),
+                 ),
               )
                   : null,
             )

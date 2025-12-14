@@ -50,7 +50,7 @@
   "no_matches": "لا توجد مباريات حالياً",
   "Data updated successfully": "تم تحديث البيانات بنجاح",
 "Only letters and numbers are allowed (no spaces)": "يسمح فقط بالحروف والأرقام (بدون مسافات)",
-
+"success": "نجاح",
   "Club name updated successfully": "تم تحديث اسم النادي بنجاح",
   "errorUpdateClub": "حدث خطأ أثناء تحديث النادي",
   "select_event_date": "اختر تاريخ الفاعلية",
