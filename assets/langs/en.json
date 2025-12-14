@@ -246,6 +246,8 @@
   "team_delete_error": "This team cannot be deleted because it is participating in an event.",
   "news_added_success": "News added successfully",
   "error_occurred":  "An error occurred, please try again later",
+  "password_rules": "Password must include uppercase, lowercase, number, special character and be at least 8 characters long",
+
   "EditScores": "Edit Scores",
   "errorDeleteToClub": "This club cannot be deleted because it is Have Match.",
   "delete_match_title": "Delete Match",

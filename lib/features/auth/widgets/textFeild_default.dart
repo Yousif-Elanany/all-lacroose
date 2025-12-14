@@ -15,7 +15,7 @@ Widget defaultFormField({
   bool? isPassword,
   String? Function(String?)? validate,
   String? label,
-  IconData? prefix,
+  Widget? prefix,
   IconData? suffix,
   VoidCallback? suffixPressed,
   bool isClickable = true,
@@ -30,6 +30,7 @@ Widget defaultFormField({
         controller: controller,
         keyboardType: type,
         obscureText: isPassword ?? false,
+
        obscuringCharacter: '*',
         enabled: isClickable,
         onFieldSubmitted: onSubmit,
@@ -46,6 +47,10 @@ Widget defaultFormField({
         ),
         strutStyle: strutStyle,
         decoration: InputDecoration(
+          errorMaxLines: 3, // ✅ مهم جدًا
+
+          prefixIcon: prefix,
+
           counterText: "",
           hintText: hint,
           alignLabelWithHint: true, // تأكد من محاذاة النص مع الحقل عند التوسعة
@@ -62,9 +67,9 @@ Widget defaultFormField({
           labelText: label,
 
         //  contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
-          errorStyle: TextStyle(
-            fontSize: 16.0, // حجم أصغر لرسالة الخطأ
-            height: 0.8,    // تقليل المسافة بين النصوص
+          errorStyle: const TextStyle(
+            fontSize: 14,
+            height: 1.4, // ✅ يسمح بتكسر السطور
           ),
 
 

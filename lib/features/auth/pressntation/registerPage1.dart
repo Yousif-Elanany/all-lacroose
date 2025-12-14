@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lacrosse/features/auth/pressntation/loginPage.dart';
 import 'package:lacrosse/features/auth/pressntation/regiserPage2.dart';
 
+import '../../../core/RegexRules/RegexRules.dart';
 import '../widgets/button_default.dart';
 import '../widgets/textFeild_default.dart';
 
@@ -24,7 +25,9 @@ class _Registerpage1State extends State<Registerpage1> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
+  // final passwordRegex = RegExp(
+  //   r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$',
+  // );
   File? selectedImage1;
   final ImagePicker _picker = ImagePicker();
 
@@ -139,14 +142,13 @@ class _Registerpage1State extends State<Registerpage1> {
                         validate: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Required'.tr();
-                          } else if (!RegExp(
-                              r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$')
-                              .hasMatch(value)) {
-                            return "inـvalid_password".tr();
+                          } else if (!passwordRegex.hasMatch(value)) {
+                            return "password_rules".tr();
                           }
                           return null;
                         },
                       ),
+
                       const SizedBox(height: 20),
 
                       /// confirm password
@@ -178,12 +180,12 @@ class _Registerpage1State extends State<Registerpage1> {
                         onTap: () {
                           if (formKey.currentState!.validate()) {
 
-                            if (selectedImage1 == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("please_select_image".tr())),
-                              );
-                              return;
-                            }
+                            // if (selectedImage1 == null) {
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     SnackBar(content: Text("please_select_image".tr())),
+                            //   );
+                            //   return;
+                            // }
                             navigateTo(
                               context,
                               Registerpage2(

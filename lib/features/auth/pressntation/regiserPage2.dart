@@ -285,9 +285,9 @@ class _Registerpage2State extends State<Registerpage2> {
                                     if (value == null || value.trim().isEmpty) {
                                       return 'Required'.tr();
                                     }
-                                    if (value.contains(" ")) {
-                                      return 'Name must not contain spaces'.tr();
-                                    }
+                                    // if (value.contains(" ")) {
+                                    //   return 'Name must not contain spaces'.tr();
+                                    // }
                                     return null;
                                   },
                                 ),
@@ -297,17 +297,28 @@ class _Registerpage2State extends State<Registerpage2> {
                                   label: "phone_number".tr(),
                                   type: TextInputType.phone,
                                   controller: _phonNumberController,
+                                  prefix:  Padding(
+                                    padding: EdgeInsets.only(right: 8,top: 12,bottom: 12),
+                                    child: Text(
+                                      "+966",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
                                   validate: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'enter_saudi_number'.tr();
                                     }
-                                    final regex = RegExp(r'^5\d{8}$'); // يبدأ بـ 5 + 8 أرقام
+
+                                    // الرقم يبدأ بـ 5 ويتكون من 9 أرقام
+                                    final regex = RegExp(r'^5\d{8}$');
                                     if (!regex.hasMatch(value)) {
                                       return 'enter_saudi_number'.tr();
                                     }
+
                                     return null;
                                   },
                                 ),
+
                                 const SizedBox(height: 16),
 
                                 /// تاريخ الميلاد
