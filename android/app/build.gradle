@@ -26,7 +26,6 @@ android {
     namespace = "com.Toq.lacrosseApp"
     compileSdk = 35
     ndkVersion = "26.1.10909125"
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
