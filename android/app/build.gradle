@@ -24,7 +24,7 @@ def flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "
 
 android {
     namespace = "com.Toq.lacrosseApp"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = "26.1.10909125"
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -38,8 +38,8 @@ android {
 
     defaultConfig {
         applicationId = "com.Toq.lacrosseApp"
-        minSdk = 23
-        targetSdk = 35
+        minSdkVersion = flutter.minSdkVersion
+        targetSdk = 36
         versionCode = 1
         versionName = "1.1.1"
     }
